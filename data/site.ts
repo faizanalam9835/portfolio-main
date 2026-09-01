@@ -44,7 +44,7 @@ export const siteConfig: SiteConfig = {
   timezone: "IST (UTC+5:30)",
   availability: "Open to opportunities",
 
-  url: env.url ?? "https://portfolio2-mauve-one.vercel.app",
+  url: env.url ?? "https://www.faizanalam.pro",
   resumeUrl: env.resume ?? "/resume.pdf",
 
   /**

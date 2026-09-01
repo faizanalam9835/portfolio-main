@@ -4,7 +4,7 @@ Personal portfolio for a full stack & AI engineer. Built as a real application
 rather than a template: a data-driven content layer, one purposeful 3D scene
 behind the hero portrait, and a hardened contact endpoint.
 
-**Live:** https://portfolio2-mauve-one.vercel.app
+**Live:** https://www.faizanalam.pro
 
 **Stack:** Next.js 16 (App Router) · React 19 · TypeScript (strict) ·
 Tailwind CSS 4 · Framer Motion · React Three Fiber + three.js · Zod ·
