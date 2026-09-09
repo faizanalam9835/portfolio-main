@@ -15,12 +15,20 @@ import { Section, SectionHeading } from "@/components/shared/section-heading";
 import { SpotlightCard } from "@/components/shared/spotlight-card";
 import { Badge } from "@/components/ui/badge";
 import { experience } from "@/data/experience";
+import {
+  formatDuration,
+  formatTenure,
+  monthsWorked,
+  totalMonthsOfExperience,
+} from "@/lib/duration";
 import { useHasFinePointer } from "@/hooks/use-media-query";
 import { EASE_OUT_EXPO, fadeUp } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import type { ExperienceItem } from "@/types";
 
-export function Experience() {
+export function Experience({ nowISO }: { nowISO: string }) {
+  const now = React.useMemo(() => new Date(nowISO), [nowISO]);
+  const totalTenure = formatDuration(totalMonthsOfExperience(experience, now));
   const railRef = React.useRef<HTMLDivElement>(null);
   const isTimeline = experience.length > 1;
 
@@ -36,12 +44,12 @@ export function Experience() {
   });
 
   return (
-    <Section id="experience" className="bg-[var(--surface)]">
+    <Section id="experience" className="surface-band">
       <SectionHeading
         index="04"
         eyebrow="Work"
         title="Experience"
-        lead="Early in my career — about 5 months in — but every month of it has been hands-on across the stack."
+        lead={`Early in my career — about ${totalTenure} in — but every month of it has been hands-on across the stack.`}
       />
 
       <div ref={railRef} className="relative mt-10 sm:mt-16">
@@ -72,7 +80,7 @@ export function Experience() {
               ) : null}
               {/* One role means nothing to compare against, so the detail is
                   open from the start rather than hidden behind a toggle. */}
-              <ExperienceCard item={item} defaultOpen={!isTimeline} />
+              <ExperienceCard item={item} defaultOpen={!isTimeline} now={now} />
             </RevealItem>
           ))}
         </RevealGroup>
@@ -95,7 +103,7 @@ function TimelineMarker({
     >
       <span
         className={cn(
-          "grid size-8 place-items-center rounded-full border bg-[var(--surface)]",
+          "grid size-8 place-items-center rounded-full border bg-[var(--surface)] frost",
           current
             ? "border-accent-violet/40 shadow-[0_0_0_4px_rgba(124,92,246,0.08)]"
             : "border-[var(--border-strong)]",
@@ -119,9 +127,11 @@ function TimelineMarker({
 function ExperienceCard({
   item,
   defaultOpen = false,
+  now,
 }: {
   item: ExperienceItem;
   defaultOpen?: boolean;
+  now: Date;
 }) {
   const hasFinePointer = useHasFinePointer();
   const [hovered, setHovered] = React.useState(false);
@@ -136,6 +146,10 @@ function ExperienceCard({
     <SpotlightCard
       tilt={0}
       accentHex={item.current ? "#7c5cf6" : "#3b6cf6"}
+      // The card already lifts and expands on hover. No drop shadow and no
+      // glow ring on top of that — the movement is the whole affordance.
+      hoverLift={false}
+      borderGlow={false}
       className={cn(
         "transition-transform duration-500",
         expanded && "sm:-translate-y-1",
@@ -173,7 +187,7 @@ function ExperienceCard({
           </div>
 
           <span className="shrink-0 rounded-full bg-[var(--surface-sunken)] px-3 py-1 font-mono text-[0.6875rem] text-[var(--text-secondary)]">
-            {item.duration}
+            {formatTenure(item.startDate, item.endDate, now)}
           </span>
         </div>
 
@@ -182,8 +196,18 @@ function ExperienceCard({
         </p>
 
         {/* Impact metrics stay visible — they are the headline, not a detail. */}
+        {/* Time in role leads the metrics and is derived from the dates,
+            so it never drifts out of date. */}
         <dl className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {item.metrics.map((metric) => (
+          {[
+            {
+              label: "Time in role",
+              value: formatDuration(
+                monthsWorked(item.startDate, item.endDate, now),
+              ),
+            },
+            ...item.metrics,
+          ].map((metric) => (
             <div
               key={metric.label}
               className="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-muted)] px-3 py-2.5"

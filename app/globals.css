@@ -8,6 +8,11 @@
  * The portfolio is light-first: white / off-white ground, ink text,
  * soft blue-violet-cyan accents. Dark mode is a supported alternate,
  * never the default.
+ *
+ * The whole page is built as glass over a single fixed backdrop: a
+ * blueprint grid plus slow aurora fields. Every surface below is
+ * therefore translucent — solidity is the exception (overlays), not
+ * the rule.
  * ------------------------------------------------------------------ */
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
@@ -30,9 +35,24 @@
   --radius-card: 1.25rem;
   --radius-pill: 999px;
 
-  --shadow-soft: 0 1px 2px rgb(17 24 39 / 0.04), 0 8px 24px -12px rgb(17 24 39 / 0.12);
-  --shadow-lift: 0 2px 4px rgb(17 24 39 / 0.04), 0 24px 48px -20px rgb(17 24 39 / 0.22);
-  --shadow-glow: 0 0 0 1px rgb(59 108 246 / 0.14), 0 18px 40px -18px rgb(124 92 246 / 0.35);
+  /* Shadows carry a little accent colour, so a lifted panel reads as
+     tinted glass instead of a grey box with a drop shadow. */
+  --shadow-soft:
+    0 1px 2px rgb(17 24 39 / 0.05),
+    0 12px 30px -16px rgb(17 24 39 / 0.18);
+  --shadow-lift:
+    0 2px 6px rgb(17 24 39 / 0.05),
+    0 32px 64px -28px rgb(59 108 246 / 0.38),
+    0 12px 30px -22px rgb(124 92 246 / 0.32);
+  --shadow-glow:
+    0 0 0 1px rgb(124 92 246 / 0.18),
+    0 22px 46px -18px rgb(124 92 246 / 0.45);
+  /* Frosted panel: inner top sheen, hairline edge, soft ambient drop. */
+  --shadow-glass:
+    inset 0 1px 0 0 var(--glass-sheen),
+    inset 0 0 0 1px var(--glass-edge),
+    0 1px 2px rgb(17 24 39 / 0.04),
+    0 24px 48px -30px rgb(17 24 39 / 0.35);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -42,6 +62,7 @@
   --animate-flow: flow 3s linear infinite;
   --animate-float: float 7s ease-in-out infinite;
   --animate-shimmer: shimmer 2.6s linear infinite;
+  --animate-aurora: aurora 26s ease-in-out infinite;
 }
 
 @keyframes marquee {
@@ -105,34 +126,94 @@
   }
 }
 
+/* Slow, wide drift for the backdrop colour fields. Transform + opacity
+   only, so it stays on the compositor. */
+@keyframes aurora {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.9;
+  }
+  33% {
+    transform: translate3d(6%, -4%, 0) scale(1.12);
+    opacity: 1;
+  }
+  66% {
+    transform: translate3d(-5%, 5%, 0) scale(0.94);
+    opacity: 0.75;
+  }
+}
+
 /* ------------------------------------------------------------------ *
  * Semantic surface variables
+ *
+ * Surfaces are alpha values, not solid colours: the fixed backdrop
+ * (grid + aurora) is meant to read through every panel on the page.
+ * `--surface-solid` and `--surface-raised` exist for the few places
+ * that genuinely need to occlude what sits behind them.
  * ------------------------------------------------------------------ */
 :root {
-  --surface: #ffffff;
-  --surface-muted: #fafafa;
-  --surface-sunken: #f5f6f8;
+  --page-base: #fafafb;
+  --page-tint-a: rgb(59 108 246 / 0.07);
+  --page-tint-b: rgb(124 92 246 / 0.07);
+  --page-tint-c: rgb(34 184 217 / 0.055);
+
+  --surface: rgb(255 255 255 / 0.62);
+  --surface-raised: rgb(255 255 255 / 0.88);
+  --surface-solid: #ffffff;
+  --surface-muted: rgb(255 255 255 / 0.42);
+  --surface-sunken: rgb(17 24 39 / 0.05);
+  --surface-band: rgb(255 255 255 / 0.55);
   --surface-glass: 255 255 255;
-  --border-subtle: #ebedf0;
-  --border-strong: #dfe2e7;
+
+  --glass-blur: 20px;
+  --glass-sheen: rgb(255 255 255 / 0.75);
+  --glass-edge: rgb(255 255 255 / 0.45);
+
+  --border-subtle: rgb(17 24 39 / 0.09);
+  --border-strong: rgb(17 24 39 / 0.16);
+
   --text-primary: #111827;
-  --text-secondary: #6b7280;
-  --text-tertiary: #9ca3af;
-  --grid-line: rgb(17 24 39 / 0.045);
-  --scrollbar-thumb: #d6d9de;
+  --text-secondary: #55607a;
+  --text-tertiary: #8b93a7;
+
+  /* Two-tier blueprint grid: hairlines every 64px, an accent-tinted
+     major line every 320px. Faint on their own — <SiteBackdrop> masks
+     them so they only gather weight down the middle of the page. */
+  --grid-line: rgb(17 24 39 / 0.05);
+  --grid-line-strong: rgb(59 108 246 / 0.05);
+
+  --scrollbar-thumb: #c9cdd6;
 }
 
 .dark {
-  --surface: #0e1320;
-  --surface-muted: #0a0e18;
-  --surface-sunken: #131a2a;
-  --surface-glass: 18 24 39;
-  --border-subtle: #1e2637;
-  --border-strong: #2a3348;
+  --page-base: #0a0e18;
+  --page-tint-a: rgb(59 108 246 / 0.13);
+  --page-tint-b: rgb(124 92 246 / 0.14);
+  --page-tint-c: rgb(34 184 217 / 0.09);
+
+  --surface: rgb(24 32 52 / 0.55);
+  --surface-raised: rgb(14 19 32 / 0.9);
+  --surface-solid: #0e1320;
+  --surface-muted: rgb(255 255 255 / 0.045);
+  --surface-sunken: rgb(255 255 255 / 0.08);
+  --surface-band: rgb(255 255 255 / 0.035);
+  --surface-glass: 16 22 37;
+
+  --glass-blur: 22px;
+  --glass-sheen: rgb(255 255 255 / 0.08);
+  --glass-edge: rgb(255 255 255 / 0.05);
+
+  --border-subtle: rgb(255 255 255 / 0.09);
+  --border-strong: rgb(255 255 255 / 0.16);
+
   --text-primary: #f4f6fb;
-  --text-secondary: #97a1b6;
-  --text-tertiary: #6b7691;
-  --grid-line: rgb(255 255 255 / 0.05);
+  --text-secondary: #a3adc4;
+  --text-tertiary: #737f99;
+
+  --grid-line: rgb(255 255 255 / 0.045);
+  --grid-line-strong: rgb(124 92 246 / 0.09);
+
   --scrollbar-thumb: #2a3348;
 }
 
@@ -146,10 +227,14 @@
     /* Sticky nav clearance for in-page anchors. */
     scroll-padding-top: 6rem;
     -webkit-tap-highlight-color: transparent;
+    /* The one opaque layer on the page — everything above it is glass. */
+    background-color: var(--page-base);
   }
 
   body {
-    background-color: var(--surface-muted);
+    /* Transparent, so the fixed <SiteBackdrop> reads through the whole
+       document instead of only the sections that opt in. */
+    background-color: transparent;
     color: var(--text-primary);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -158,7 +243,7 @@
   }
 
   ::selection {
-    background-color: color-mix(in oklab, var(--color-accent-violet) 22%, transparent);
+    background-color: color-mix(in oklab, var(--color-accent-violet) 24%, transparent);
     color: var(--text-primary);
   }
 
@@ -191,24 +276,61 @@
   ::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb);
     border-radius: 999px;
-    border: 3px solid var(--surface-muted);
+    border: 3px solid var(--page-base);
   }
 }
 
 @layer components {
-  /* Subtle glass — used sparingly (nav, floating chips, overlay cards). */
+  /* ---------------------------------------------------------------- *
+   * Glass
+   * One frosted recipe at three weights: `.glass` for floating chips
+   * and the nav, `.card-surface` for panels, `.glass-raised` for
+   * overlays where legibility beats see-through.
+   * ---------------------------------------------------------------- */
   .glass {
-    background-color: rgb(var(--surface-glass) / 0.72);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-image: linear-gradient(
+      160deg,
+      rgb(var(--surface-glass) / 0.8),
+      rgb(var(--surface-glass) / 0.52)
+    );
+    backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(190%);
     border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-glass);
   }
 
   .card-surface {
-    background-color: var(--surface);
+    position: relative;
+    background-image: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--surface) 100%, transparent),
+      color-mix(in srgb, var(--surface) 58%, transparent)
+    );
+    backdrop-filter: blur(var(--glass-blur)) saturate(175%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(175%);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-card);
-    box-shadow: var(--shadow-soft);
+    box-shadow: var(--shadow-glass);
+  }
+
+  .glass-raised {
+    background-color: var(--surface-raised);
+    backdrop-filter: blur(28px) saturate(190%);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-lift);
+  }
+
+  /* Full-bleed section band: tints the strip and fades at both edges so
+     the grid keeps running through it. */
+  .surface-band {
+    background-image: linear-gradient(
+      180deg,
+      transparent,
+      var(--surface-band) 6%,
+      var(--surface-band) 94%,
+      transparent
+    );
   }
 
   .text-gradient {
@@ -223,16 +345,24 @@
     color: transparent;
   }
 
-  /* Blueprint grid ground used behind hero + architecture. */
+  /* Blueprint grid ground. Two tiers — hairlines plus accent majors —
+     so the page reads as drafting paper rather than a faint wash. */
   .bg-grid {
     background-image:
       linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-    background-size: 56px 56px;
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to right, var(--grid-line-strong) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line-strong) 1px, transparent 1px);
+    background-size:
+      64px 64px,
+      64px 64px,
+      320px 320px,
+      320px 320px;
+    background-position: center center;
   }
 
   .bg-dots {
-    background-image: radial-gradient(var(--grid-line) 1px, transparent 1px);
+    background-image: radial-gradient(var(--grid-line-strong) 1px, transparent 1px);
     background-size: 22px 22px;
   }
 
@@ -277,6 +407,35 @@
   /* Applied by <CustomCursor> once the pointer-fine cursor takes over. */
   .cursor-none-desktop {
     cursor: none;
+  }
+
+  /* Frosted blur without committing to a background colour — for
+     elements that already set their own translucent one. */
+  .frost {
+    backdrop-filter: blur(var(--glass-blur)) saturate(175%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(175%);
+  }
+
+  .frost-sm {
+    backdrop-filter: blur(10px) saturate(150%);
+    -webkit-backdrop-filter: blur(10px) saturate(150%);
+  }
+
+  /* A 1px accent-gradient hairline along the top edge of a panel. */
+  .edge-highlight::before {
+    content: "";
+    position: absolute;
+    inset-inline: 14%;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent-violet),
+      transparent
+    );
+    opacity: 0.5;
+    pointer-events: none;
   }
 }
 

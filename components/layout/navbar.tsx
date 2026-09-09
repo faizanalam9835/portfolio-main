@@ -41,13 +41,13 @@ export function Navbar() {
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500",
           scrolled
-            ? "border-b border-[var(--border-subtle)] bg-[rgb(var(--surface-glass)/0.72)] shadow-[0_1px_0_0_rgb(17_24_39/0.03)] backdrop-blur-xl backdrop-saturate-150"
+            ? "border-b border-[var(--border-subtle)] bg-[rgb(var(--surface-glass)/0.6)] shadow-[0_1px_0_0_var(--glass-sheen),0_18px_40px_-32px_rgb(17_24_39/0.5)] backdrop-blur-2xl backdrop-saturate-200"
             : "border-b border-transparent bg-transparent",
         )}
       >
         <nav
           aria-label="Primary"
-          className="mx-auto flex h-16 w-full max-w-[84rem] items-center justify-between gap-6 px-5 sm:h-18 sm:px-8 lg:px-12 xl:px-16"
+          className="mx-auto flex h-16 w-full max-w-[88rem] items-center justify-between gap-6 px-5 sm:h-18 sm:px-8 lg:px-12 xl:px-16"
         >
           <Wordmark onNavigate={() => setMenuOpen(false)} />
 
@@ -79,7 +79,7 @@ export function Navbar() {
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               className={cn(
                 "grid size-10 place-items-center rounded-full lg:hidden",
-                "border border-[var(--border-subtle)] bg-[var(--surface)]",
+                "border border-[var(--border-subtle)] bg-[var(--surface)] frost",
                 "text-[var(--text-primary)] transition-colors duration-300",
               )}
             >
@@ -165,7 +165,7 @@ function NavLink({
       {active ? (
         <motion.span
           layoutId="nav-active-pill"
-          className="absolute inset-0 -z-10 rounded-full bg-[var(--surface-sunken)]"
+          className="absolute inset-0 -z-10 rounded-full border border-[var(--border-subtle)] bg-[var(--surface)] shadow-[inset_0_1px_0_0_var(--glass-sheen)]"
           transition={{ type: "spring", stiffness: 380, damping: 32 }}
         />
       ) : null}
@@ -233,7 +233,7 @@ function MobileMenu({
             type="button"
             aria-label="Close menu"
             onClick={onClose}
-            className="absolute inset-0 bg-ink-900/20 backdrop-blur-sm"
+            className="absolute inset-0 bg-ink-900/25 backdrop-blur-md"
           />
 
           <motion.div
@@ -243,7 +243,7 @@ function MobileMenu({
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
               "absolute inset-x-3 top-20 overflow-hidden rounded-2xl",
-              "border border-[var(--border-subtle)] bg-[var(--surface)] p-3 shadow-lift",
+              "glass-raised p-3",
             )}
           >
             <ul className="flex flex-col">

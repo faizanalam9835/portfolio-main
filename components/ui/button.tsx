@@ -16,19 +16,23 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: [
-          "bg-ink-900 text-white shadow-soft",
+          "bg-ink-900/95 text-white shadow-soft backdrop-blur-sm",
           "hover:bg-ink-950 hover:shadow-lift",
-          "dark:bg-white dark:text-ink-900 dark:hover:bg-ink-50",
+          "dark:bg-white/95 dark:text-ink-900 dark:hover:bg-white",
         ],
         accent: [
-          "bg-gradient-to-r from-accent-blue to-accent-violet text-white",
-          "shadow-[0_10px_30px_-12px_rgba(124,92,246,0.65)]",
-          "hover:shadow-[0_16px_40px_-14px_rgba(124,92,246,0.8)]",
+          // Oversized background so the gradient can slide on hover.
+          "relative overflow-hidden text-white",
+          "bg-[linear-gradient(110deg,var(--color-accent-blue),var(--color-accent-violet),var(--color-accent-cyan),var(--color-accent-violet))]",
+          "bg-[length:280%_100%] bg-[position:0%_50%] hover:bg-[position:100%_50%]",
+          "transition-[background-position,box-shadow,transform] duration-700",
+          "shadow-[0_10px_30px_-12px_rgba(124,92,246,0.7),inset_0_1px_0_0_rgba(255,255,255,0.28)]",
+          "hover:shadow-[0_18px_44px_-14px_rgba(124,92,246,0.9),inset_0_1px_0_0_rgba(255,255,255,0.35)]",
         ],
         outline: [
-          "border border-[var(--border-strong)] bg-[var(--surface)]",
-          "text-[var(--text-primary)] hover:border-accent-blue/40",
-          "hover:bg-accent-blue/[0.04] hover:shadow-soft",
+          "frost border border-[var(--border-strong)] bg-[var(--surface)]",
+          "text-[var(--text-primary)] hover:border-accent-blue/45",
+          "hover:bg-accent-blue/[0.06] hover:shadow-glow",
         ],
         ghost: [
           "text-[var(--text-secondary)]",

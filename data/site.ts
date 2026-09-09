@@ -1,3 +1,5 @@
+import { experience } from "@/data/experience";
+import { totalMonthsOfExperience } from "@/lib/duration";
 import type { NavItem, SiteConfig, SocialLink, Stat } from "@/types";
 
 /**
@@ -80,11 +82,20 @@ export const socialLinks: readonly SocialLink[] = [
  * Honest, early-career numbers. Keep these small and true — a short,
  * credible list reads far better than inflated claims.
  */
-export const stats: readonly Stat[] = [
+/**
+ * Stats are a function, not a constant: the experience figure is derived
+ * from the dates in `data/experience.ts` so it never needs editing by hand.
+ * `now` is passed in from the page, so server and client agree on it.
+ */
+export function getStats(now: Date): readonly Stat[] {
+  const months = totalMonthsOfExperience(experience, now);
+  const inYears = months >= 12;
+
+  return [
   {
-    label: "Months of Experience",
-    value: 5,
-    suffix: "",
+    label: inYears ? "Years of Experience" : "Months of Experience",
+    value: inYears ? Math.floor(months / 12) : months,
+    suffix: inYears ? "+" : "",
     description: "Hands-on, working on real production code.",
   },
   {
@@ -105,7 +116,8 @@ export const stats: readonly Stat[] = [
     suffix: "",
     description: "Completed courses backing up the practical work.",
   },
-] as const;
+  ];
+}
 
 /** Copy for the About section — kept out of the component. */
 export const aboutContent = {
@@ -113,7 +125,8 @@ export const aboutContent = {
   eyebrow: "About",
   lead: "Full stack by day, AI by obsession. I like building things that actually work — and understanding why they work, not just that they do.",
   paragraphs: [
-    "I'm a full stack and AI engineer with around 5 months of hands-on experience. I mostly work with React, Next.js, Node.js and MongoDB, and I've spent that time building features end to end rather than sticking to one layer.",
+    // {tenure} is filled in by <About> from the experience dates.
+    "I'm a full stack and AI engineer with around {tenure} of hands-on experience. I mostly work with React, Next.js, Node.js and MongoDB, and I've spent that time building features end to end rather than sticking to one layer.",
     "Right now I'm focused on getting the fundamentals right: clean components, sensible API design, data models that don't fall apart later, and UI that feels quick. I'd rather deeply understand a small stack than skim a big one.",
     "The AI side is where most of my curiosity goes: LLM APIs, embeddings, retrieval and RAG pipelines — wiring them into real products rather than notebooks, with a UI and a database behind them.",
   ],

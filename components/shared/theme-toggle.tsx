@@ -23,9 +23,9 @@ export function ThemeToggle({ className }: { className?: string }) {
       aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
       className={cn(
         "relative grid size-10 place-items-center rounded-full",
-        "border border-[var(--border-subtle)] bg-[var(--surface)]",
+        "frost border border-[var(--border-subtle)] bg-[var(--surface)]",
         "text-[var(--text-secondary)] transition-colors duration-300",
-        "hover:border-accent-violet/30 hover:text-[var(--text-primary)]",
+        "hover:border-accent-violet/35 hover:text-[var(--text-primary)] hover:shadow-glow",
         className,
       )}
     >

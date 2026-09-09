@@ -6,11 +6,16 @@ import { AnimatedCounter } from "@/components/shared/animated-counter";
 import { Reveal, RevealGroup, RevealItem } from "@/components/shared/reveal";
 import { Section, SectionHeading } from "@/components/shared/section-heading";
 import { Badge } from "@/components/ui/badge";
-import { aboutContent, stats } from "@/data/site";
+import { aboutContent, getStats } from "@/data/site";
+import { experience } from "@/data/experience";
+import { formatDuration, totalMonthsOfExperience } from "@/lib/duration";
 import { fadeRight, fadeUp, scaleIn } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
-export function About() {
+export function About({ nowISO }: { nowISO: string }) {
+  const now = new Date(nowISO);
+  const tenure = formatDuration(totalMonthsOfExperience(experience, now));
+
   return (
     <Section id="about">
       {/* Full-width heading, same as every other section, so the eyebrow,
@@ -32,7 +37,7 @@ export function About() {
                 variants={fadeUp}
                 className="block text-[0.9375rem] leading-[1.75] text-[var(--text-secondary)] sm:text-base"
               >
-                {paragraph}
+                {paragraph.replace("{tenure}", tenure)}
               </RevealItem>
             ))}
           </RevealGroup>
@@ -54,7 +59,7 @@ export function About() {
 
         {/* The skimmable version — quick facts rather than a values manifesto. */}
         <Reveal variants={fadeRight}>
-          <div className="card-surface h-full overflow-hidden">
+          <div className="card-surface edge-highlight h-full overflow-hidden">
             <div className="border-b border-[var(--border-subtle)] px-5 py-5 sm:px-6">
               <p className="text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-[var(--text-tertiary)]">
                 Quick facts
@@ -96,29 +101,31 @@ export function About() {
         </Reveal>
       </div>
 
-      <StatsRow />
+      <StatsRow nowISO={nowISO} />
     </Section>
   );
 }
 
-function StatsRow() {
+function StatsRow({ nowISO }: { nowISO: string }) {
+  const stats = getStats(new Date(nowISO));
+
   return (
     <RevealGroup
-      className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--border-subtle)] sm:mt-16 lg:grid-cols-4"
+      className="frost mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--border-subtle)] shadow-glass sm:mt-16 lg:grid-cols-4"
       stagger={0.09}
     >
       {stats.map((stat) => (
         <RevealItem
           key={stat.label}
           variants={fadeUp}
-          className="group relative flex flex-col bg-[var(--surface)] p-5 transition-colors duration-500 hover:bg-[var(--surface-sunken)] sm:p-7"
+          className="group relative flex flex-col bg-[var(--surface)] p-5 transition-colors duration-500 hover:bg-[var(--surface-raised)] sm:p-7"
         >
           <div
             aria-hidden
             className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-violet/40 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           />
 
-          <p className="text-[1.75rem] font-semibold leading-none tracking-tight text-[var(--text-primary)] sm:text-[2.4rem]">
+          <p className="text-gradient text-[1.75rem] font-semibold leading-none tracking-tight sm:text-[2.4rem]">
             <AnimatedCounter value={stat.value} suffix={stat.suffix} />
           </p>
           <p className="mt-3 text-sm font-medium text-[var(--text-primary)]">

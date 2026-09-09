@@ -45,12 +45,25 @@ export function SectionHeading({
     >
       <RevealItem
         variants={fadeUp}
-        className="flex items-center gap-3 text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-[var(--text-tertiary)]"
+        className={cn(
+          "inline-flex items-center gap-2.5 rounded-full py-1.5 pr-4",
+          index ? "pl-1.5" : "pl-4",
+          "glass text-[0.6875rem] font-medium uppercase tracking-[0.2em]",
+          "text-[var(--text-secondary)]",
+        )}
       >
         {index ? (
-          <span className="font-mono text-accent-violet">{index}</span>
+          <span
+            className={cn(
+              "grid size-6 place-items-center rounded-full font-mono",
+              "bg-gradient-to-br from-accent-blue to-accent-violet",
+              "text-[0.625rem] tracking-normal text-white",
+              "shadow-[0_4px_12px_-4px_rgba(124,92,246,0.9)]",
+            )}
+          >
+            {index}
+          </span>
         ) : null}
-        <span className="h-px w-8 bg-gradient-to-r from-accent-blue to-accent-violet" />
         {eyebrow}
       </RevealItem>
 
@@ -65,6 +78,16 @@ export function SectionHeading({
       >
         <h2>{title}</h2>
       </RevealItem>
+
+      {/* Accent rule under the title — gives each section a start line. */}
+      <RevealItem
+        aria-hidden
+        variants={fadeUp}
+        className={cn(
+          "h-px w-20 bg-gradient-to-r from-accent-blue via-accent-violet to-transparent",
+          centered && "bg-gradient-to-r from-transparent via-accent-violet to-transparent",
+        )}
+      />
 
       {lead ? (
         <RevealItem
@@ -112,11 +135,15 @@ export function Section({
       className={cn(
         "relative scroll-mt-24 py-16 sm:py-24 lg:py-32",
         !bleed && "px-5 sm:px-8 lg:px-12 xl:px-16",
+        // A tinted band gets a hairline at each edge so it reads as a
+        // deliberate block instead of a patch of colour.
+        className?.includes("surface-band") &&
+          "before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-[var(--border-strong)] before:to-transparent after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[var(--border-strong)] after:to-transparent",
         className,
       )}
       {...props}
     >
-      {bleed ? children : <div className="mx-auto w-full max-w-[84rem]">{children}</div>}
+      {bleed ? children : <div className="mx-auto w-full max-w-[88rem]">{children}</div>}
     </section>
   );
 }
@@ -125,7 +152,7 @@ export function Section({
 export function SectionDivider({ className }: { className?: string }) {
   return (
     <Reveal
-      className={cn("mx-auto w-full max-w-[84rem] px-5 sm:px-8 lg:px-12 xl:px-16", className)}
+      className={cn("mx-auto w-full max-w-[88rem] px-5 sm:px-8 lg:px-12 xl:px-16", className)}
       aria-hidden
     >
       <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />

@@ -104,7 +104,7 @@ export function ProjectModal({
             transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
             className={cn(
               "relative flex max-h-[92svh] w-full max-w-4xl flex-col overflow-hidden",
-              "rounded-t-3xl border border-[var(--border-subtle)] bg-[var(--surface)]",
+              "glass-raised rounded-t-3xl",
               "shadow-lift sm:rounded-3xl",
             )}
           >

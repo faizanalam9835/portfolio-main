@@ -17,6 +17,11 @@ export interface SpotlightCardProps
   /** Adds an animated conic border on hover. */
   borderGlow?: boolean;
   /**
+   * Whether the card gains a drop shadow on hover. Off for cards that
+   * already move or expand on hover — the shadow reads as noise there.
+   */
+  hoverLift?: boolean;
+  /**
    * Classes for the inner content wrapper. The wrapper is a flex column by
    * default, which is what makes `flex-1` and `mt-auto` inside a card
    * behave — pass a grid here to lay a card out horizontally instead.
@@ -36,6 +41,7 @@ export function SpotlightCard({
   tilt = 6,
   accentHex = "#7c5cf6",
   borderGlow = true,
+  hoverLift = true,
   className,
   contentClassName,
   children,
@@ -117,8 +123,10 @@ export function SpotlightCard({
         <div
           className={cn(
             "relative isolate h-full overflow-hidden rounded-2xl",
-            "border border-[var(--border-subtle)] bg-[var(--surface)]",
-            "shadow-soft transition-shadow duration-500 group-hover/card:shadow-lift",
+            "border border-[var(--border-subtle)] bg-[var(--surface)] frost",
+            "shadow-glass transition-all duration-500",
+            "group-hover/card:border-accent-violet/25",
+            hoverLift && "group-hover/card:shadow-lift",
             className,
           )}
           {...props}

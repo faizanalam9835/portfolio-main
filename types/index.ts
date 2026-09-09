@@ -74,8 +74,10 @@ export interface ExperienceItem {
   company: string;
   role: string;
   employmentType: string;
-  duration: string;
-  period: { start: string; end: string | "Present" };
+  /** Month the role started, as `YYYY-MM`. */
+  startDate: string;
+  /** Month it ended, as `YYYY-MM`. Omit while the role is current. */
+  endDate?: string;
   location: string;
   summary: string;
   responsibilities: string[];

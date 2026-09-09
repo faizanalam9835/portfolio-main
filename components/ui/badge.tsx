@@ -14,9 +14,9 @@ const badgeVariants = cva(
         neutral:
           "border border-[var(--border-subtle)] bg-[var(--surface)] text-[var(--text-secondary)]",
         muted: "bg-[var(--surface-sunken)] text-[var(--text-secondary)]",
-        blue: "bg-accent-blue/8 text-accent-blue ring-1 ring-accent-blue/15",
-        violet: "bg-accent-violet/8 text-accent-violet ring-1 ring-accent-violet/15",
-        cyan: "bg-accent-cyan/10 text-accent-cyan ring-1 ring-accent-cyan/20",
+        blue: "bg-accent-blue/10 text-accent-blue ring-1 ring-accent-blue/20",
+        violet: "bg-accent-violet/10 text-accent-violet ring-1 ring-accent-violet/20",
+        cyan: "bg-accent-cyan/12 text-accent-cyan ring-1 ring-accent-cyan/25",
         outline:
           "border border-[var(--border-strong)] text-[var(--text-primary)]",
       },

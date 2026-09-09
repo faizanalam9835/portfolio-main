@@ -26,13 +26,19 @@ export function Hero() {
       id="home"
       className="relative overflow-hidden px-5 pb-16 pt-24 sm:px-8 sm:pb-24 sm:pt-32 lg:min-h-[100svh] lg:px-12 lg:pb-28 lg:pt-36 xl:px-16"
     >
-      {/* Blueprint ground, faded out toward the bottom of the fold. */}
+      {/* The blueprint grid is global now (<SiteBackdrop>); the hero only
+          adds its own light source on top of it. */}
       <div
         aria-hidden
-        className="bg-grid pointer-events-none absolute inset-0 -z-20 opacity-70 [mask-image:radial-gradient(80%_60%_at_50%_25%,black,transparent)]"
+        className="pointer-events-none absolute inset-0 -z-20"
+        style={{
+          background:
+            "radial-gradient(70% 55% at 22% 18%, rgb(124 92 246 / 0.08), transparent 70%)," +
+            "radial-gradient(55% 45% at 88% 28%, rgb(34 184 217 / 0.06), transparent 72%)",
+        }}
       />
 
-      <div className="mx-auto w-full max-w-[84rem]">
+      <div className="mx-auto w-full max-w-[88rem]">
         <div className="grid items-center gap-10 sm:gap-14 lg:grid-cols-[1.25fr_0.75fr] lg:gap-16 xl:gap-20">
           {/* ── Copy column ───────────────────────────────────────────── */}
           <motion.div

@@ -6,11 +6,6 @@ import { Button } from "@/components/ui/button";
 export default function NotFound() {
   return (
     <main className="relative grid min-h-[100svh] place-items-center px-5">
-      <div
-        aria-hidden
-        className="bg-grid pointer-events-none absolute inset-0 opacity-60 [mask-image:radial-gradient(60%_50%_at_50%_40%,black,transparent)]"
-      />
-
       <div className="relative flex max-w-md flex-col items-center text-center">
         <p className="font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
           404

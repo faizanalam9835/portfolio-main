@@ -19,8 +19,8 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative border-t border-[var(--border-subtle)] bg-[var(--surface)]">
-      <div className="mx-auto w-full max-w-[84rem] px-5 py-12 sm:px-8 sm:py-14 lg:px-12 xl:px-16">
+    <footer className="frost relative border-t border-[var(--border-subtle)] bg-[var(--surface-band)]">
+      <div className="mx-auto w-full max-w-[88rem] px-5 py-12 sm:px-8 sm:py-14 lg:px-12 xl:px-16">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-sm">
             <p className="text-lg font-semibold tracking-tight text-[var(--text-primary)]">

@@ -16,7 +16,7 @@ import type { SkillCategory } from "@/types";
  */
 export function Technologies() {
   return (
-    <Section id="tech" className="bg-[var(--surface)]">
+    <Section id="tech" className="surface-band">
       <SectionHeading
         index="02"
         eyebrow="Stack"
@@ -78,7 +78,7 @@ function CategoryRow({ category }: { category: SkillCategory }) {
                 "border-[var(--border-subtle)] bg-[var(--surface-muted)]",
                 "text-[0.75rem] font-medium text-[var(--text-primary)] sm:text-[0.8125rem]",
                 "transition-all duration-300",
-                "hover:-translate-y-0.5 hover:border-accent-violet/30 hover:bg-[var(--surface)] hover:shadow-soft",
+                "hover:-translate-y-0.5 hover:border-accent-violet/35 hover:bg-[var(--surface)] hover:shadow-glow",
               )}
             >
               <LevelMeter level={skill.level} accent={category.accent} />

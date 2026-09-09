@@ -114,8 +114,8 @@ export function Contact() {
                       data-cursor-label="Open"
                       className={cn(
                         "group flex items-center gap-3.5 rounded-2xl border p-3.5",
-                        "border-[var(--border-subtle)] bg-[var(--surface)] shadow-soft",
-                        "transition-all duration-300 hover:-translate-y-0.5 hover:border-accent-violet/30 hover:shadow-lift",
+                        "border-[var(--border-subtle)] bg-[var(--surface)] frost shadow-glass",
+                        "transition-all duration-300 hover:-translate-y-0.5 hover:border-accent-violet/35 hover:shadow-lift",
                       )}
                     >
                       <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-accent-blue/10 to-accent-violet/12 text-accent-violet">
@@ -141,7 +141,7 @@ export function Contact() {
         {/* ── Form ─────────────────────────────────────────────────── */}
         <Reveal variants={fadeRight}>
           <div className="relative">
-            <div className="card-surface p-5 sm:p-8">
+            <div className="card-surface edge-highlight p-5 sm:p-8">
               <ContactForm />
             </div>
           </div>

@@ -10,8 +10,7 @@ export const experience: readonly ExperienceItem[] = [
     company: "Excelerate Technologies",
     role: "Software Development Engineer",
     employmentType: "Full-time",
-    duration: "Apr 2025 — Present · 5 months",
-    period: { start: "Apr 2025", end: "Present" },
+    startDate: "2026-04",
     location: "Remote",
     current: true,
     summary:
@@ -40,8 +39,8 @@ export const experience: readonly ExperienceItem[] = [
       "REST APIs",
       "Git",
     ],
+    // "Time in role" is prepended by the section from startDate/endDate.
     metrics: [
-      { label: "Time in role", value: "5 months" },
       { label: "Features shipped", value: "10+" },
       { label: "Stack", value: "MERN + Next.js" },
     ],
@@ -51,8 +50,8 @@ export const experience: readonly ExperienceItem[] = [
     company: "Elevate Labs",
     role: "Full Stack Web Developer Intern",
     employmentType: "Internship",
-    duration: "Jun 2025 — Jul 2025 · 2 months",
-    period: { start: "Jun 2025", end: "Jul 2025" },
+    startDate: "2025-06",
+    endDate: "2025-07",
     location: "Remote",
     summary:
       "My first professional development role. Worked across the MERN stack on real features, and learned what changes when code has to survive other people using it.",
@@ -77,7 +76,6 @@ export const experience: readonly ExperienceItem[] = [
     ],
     metrics: [
       { label: "Load time", value: "−30%" },
-      { label: "Duration", value: "2 months" },
       { label: "Mode", value: "Remote" },
     ],
   },

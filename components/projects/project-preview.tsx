@@ -26,7 +26,7 @@ export function ProjectPreview({
   return (
     <div
       className={cn(
-        "relative overflow-hidden bg-[var(--surface-muted)]",
+        "relative overflow-hidden bg-[var(--surface-muted)] frost-sm",
         className,
       )}
     >
@@ -40,7 +40,10 @@ export function ProjectPreview({
         }}
       />
 
-      <div aria-hidden className="bg-grid absolute inset-0 opacity-60" />
+      <div
+        aria-hidden
+        className="bg-grid absolute inset-0 opacity-70 [background-size:26px_26px,26px_26px,130px_130px,130px_130px]"
+      />
 
       <svg
         viewBox="0 0 480 300"

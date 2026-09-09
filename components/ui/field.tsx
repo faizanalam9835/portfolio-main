@@ -7,12 +7,12 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const controlClasses = [
-  "w-full rounded-2xl border bg-[var(--surface)] px-4 text-[0.95rem]",
+  "frost w-full rounded-2xl border bg-[var(--surface)] px-4 text-[0.95rem]",
   "text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]",
   "transition-[border-color,box-shadow,background-color] duration-300",
   "border-[var(--border-strong)]",
   "hover:border-accent-blue/35",
-  "focus:border-accent-blue focus:shadow-[0_0_0_4px_rgba(59,108,246,0.12)]",
+  "focus:border-accent-blue focus:shadow-[0_0_0_4px_rgba(59,108,246,0.15)]",
   "focus-visible:outline-none",
   "disabled:cursor-not-allowed disabled:opacity-60",
 ];

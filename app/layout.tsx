@@ -4,6 +4,7 @@ import type * as React from "react";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { CustomCursor } from "@/components/shared/custom-cursor";
+import { SiteBackdrop } from "@/components/shared/site-backdrop";
 import { baseMetadata, buildStructuredData } from "@/lib/seo";
 
 import "./globals.css";
@@ -39,8 +40,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0e18" },
+    { media: "(prefers-color-scheme: light)", color: "#f6f7fc" },
+    { media: "(prefers-color-scheme: dark)", color: "#070a13" },
   ],
   colorScheme: "light dark",
 };
@@ -64,6 +65,9 @@ export default function RootLayout({
         className={`${sans.variable} ${mono.variable} ${display.variable} antialiased`}
       >
         <ThemeProvider>
+          {/* Fixed grid + aurora ground; every surface above it is glass. */}
+          <SiteBackdrop />
+
           <a
             href="#main"
             className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-ink-900 focus:px-5 focus:py-2.5 focus:text-sm focus:font-medium focus:text-white"
