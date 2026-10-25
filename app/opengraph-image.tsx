@@ -23,8 +23,7 @@ export default function OpenGraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px",
-          background:
-            "radial-gradient(1000px 620px at 78% -10%, #ece8ff 0%, transparent 60%), radial-gradient(760px 520px at 8% 110%, #e2ecff 0%, transparent 62%), #ffffff",
+          background: "#000000",
           fontFamily: "sans-serif",
         }}
       >
@@ -33,8 +32,9 @@ export default function OpenGraphImage() {
             style={{
               width: 52,
               height: 52,
-              borderRadius: 16,
-              background: "linear-gradient(135deg, #3b6cf6, #7c5cf6)",
+              borderRadius: 6,
+              background: "#000000",
+              border: "2px solid #ffffff",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -50,10 +50,10 @@ export default function OpenGraphImage() {
               .join("")}
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 26, fontWeight: 600, color: "#111827" }}>
+            <div style={{ fontSize: 26, fontWeight: 600, color: "#ffffff" }}>
               {siteConfig.name}
             </div>
-            <div style={{ fontSize: 18, color: "#6b7280", marginTop: 4 }}>
+            <div style={{ fontSize: 18, color: "#a3a3a3", marginTop: 4 }}>
               {siteConfig.role}
             </div>
           </div>
@@ -66,7 +66,7 @@ export default function OpenGraphImage() {
               lineHeight: 1.08,
               fontWeight: 600,
               letterSpacing: "-0.03em",
-              color: "#111827",
+              color: "#ffffff",
               maxWidth: 940,
               display: "flex",
             }}
@@ -77,7 +77,7 @@ export default function OpenGraphImage() {
           <div
             style={{
               fontSize: 24,
-              color: "#6b7280",
+              color: "#a3a3a3",
               marginTop: 26,
               maxWidth: 880,
               display: "flex",
@@ -95,10 +95,10 @@ export default function OpenGraphImage() {
                 display: "flex",
                 alignItems: "center",
                 padding: "10px 20px",
-                borderRadius: 999,
-                border: "1px solid #e5e7eb",
+                borderRadius: 6,
+                border: "1px solid #ffffff",
                 background: "#ffffff",
-                color: "#374151",
+                color: "#000000",
                 fontSize: 20,
               }}
             >

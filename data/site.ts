@@ -54,7 +54,7 @@ export const siteConfig: SiteConfig = {
    * portrait or square crop works best. Or point NEXT_PUBLIC_AVATAR_URL at
    * a hosted image.
    */
-  avatar: env.avatar ?? "/profile.jpg",
+  avatar: env.avatar ?? "/hero.png",
 
   github: env.github ?? "https://github.com/faizanalam9835",
   githubUser: process.env.NEXT_PUBLIC_GITHUB_USERNAME ?? "faizanalam9835",
@@ -62,13 +62,13 @@ export const siteConfig: SiteConfig = {
 };
 
 export const navItems: readonly NavItem[] = [
-  { id: "home", label: "Home", href: "#home" },
-  { id: "about", label: "About", href: "#about" },
-  { id: "tech", label: "Tech", href: "#tech" },
-  { id: "projects", label: "Projects", href: "#projects" },
-  { id: "experience", label: "Experience", href: "#experience" },
-  { id: "education", label: "Education", href: "#education" },
-  { id: "contact", label: "Contact", href: "#contact" },
+  { id: "home", label: "Home", href: "/" },
+  { id: "about", label: "About", href: "/about" },
+  { id: "skills", label: "Skills", href: "/skills" },
+  { id: "projects", label: "Projects", href: "/projects" },
+  { id: "experience", label: "Experience", href: "/experience" },
+  { id: "education", label: "Education", href: "/education" },
+  { id: "contact", label: "Contact", href: "/contact" },
 ] as const;
 
 export const socialLinks: readonly SocialLink[] = [
@@ -135,6 +135,7 @@ export const aboutContent = {
     "Next.js",
     "Node.js",
     "MongoDB",
+    "PostgreSQL",
     "TypeScript",
     "REST APIs",
     "LLM APIs",

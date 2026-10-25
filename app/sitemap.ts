@@ -12,11 +12,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 1,
     },
-    // Section anchors are indexed so search results can deep-link into the page.
+    // Every section has its own full-detail page.
     ...navItems
       .filter((item) => item.id !== "home")
       .map((item) => ({
-        url: `${siteConfig.url}/${item.href}`,
+        url: `${siteConfig.url}${item.href}`,
         lastModified,
         changeFrequency: "monthly" as const,
         priority: 0.6,

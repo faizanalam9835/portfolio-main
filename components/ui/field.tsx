@@ -7,14 +7,10 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const controlClasses = [
-  "frost w-full rounded-2xl border bg-[var(--surface)] px-4 text-[0.95rem]",
-  "text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]",
-  "transition-[border-color,box-shadow,background-color] duration-300",
-  "border-[var(--border-strong)]",
-  "hover:border-accent-blue/35",
-  "focus:border-accent-blue focus:shadow-[0_0_0_4px_rgba(59,108,246,0.15)]",
-  "focus-visible:outline-none",
-  "disabled:cursor-not-allowed disabled:opacity-60",
+  "w-full rounded-md border border-black/15 bg-white px-4 text-[0.95rem] text-black",
+  "placeholder:text-black/35 transition-[border-color,box-shadow] duration-300",
+  "hover:border-black/40 focus:border-black focus:shadow-[0_0_0_3px_rgba(0,0,0,0.12)]",
+  "focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60",
 ];
 
 const invalidClasses =
@@ -70,14 +66,14 @@ export function Label({
     <label
       className={cn(
         "flex items-baseline justify-between gap-3 text-[0.8125rem] font-medium",
-        "text-[var(--text-secondary)]",
+        "text-black/70",
         className,
       )}
       {...props}
     >
       <span>{children}</span>
       {hint ? (
-        <span className="font-normal text-[var(--text-tertiary)]">{hint}</span>
+        <span className="font-normal text-black/40">{hint}</span>
       ) : null}
     </label>
   );

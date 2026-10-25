@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 const buttonVariants = cva(
   [
     "inline-flex items-center justify-center gap-2 whitespace-nowrap",
-    "rounded-full text-sm font-medium tracking-tight",
+    "rounded-md text-sm font-medium tracking-tight",
     "transition-[background-color,color,box-shadow,transform,border-color] duration-300",
     "outline-none disabled:pointer-events-none disabled:opacity-55",
     "[&_svg]:size-4 [&_svg]:shrink-0",
@@ -15,33 +15,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: [
-          "bg-ink-900/95 text-white shadow-soft backdrop-blur-sm",
-          "hover:bg-ink-950 hover:shadow-lift",
-          "dark:bg-white/95 dark:text-ink-900 dark:hover:bg-white",
-        ],
-        accent: [
-          // Oversized background so the gradient can slide on hover.
-          "relative overflow-hidden text-white",
-          "bg-[linear-gradient(110deg,var(--color-accent-blue),var(--color-accent-violet),var(--color-accent-cyan),var(--color-accent-violet))]",
-          "bg-[length:280%_100%] bg-[position:0%_50%] hover:bg-[position:100%_50%]",
-          "transition-[background-position,box-shadow,transform] duration-700",
-          "shadow-[0_10px_30px_-12px_rgba(124,92,246,0.7),inset_0_1px_0_0_rgba(255,255,255,0.28)]",
-          "hover:shadow-[0_18px_44px_-14px_rgba(124,92,246,0.9),inset_0_1px_0_0_rgba(255,255,255,0.35)]",
-        ],
-        outline: [
-          "frost border border-[var(--border-strong)] bg-[var(--surface)]",
-          "text-[var(--text-primary)] hover:border-accent-blue/45",
-          "hover:bg-accent-blue/[0.06] hover:shadow-glow",
-        ],
-        ghost: [
-          "text-[var(--text-secondary)]",
-          "hover:bg-[var(--surface-sunken)] hover:text-[var(--text-primary)]",
-        ],
-        glass: [
-          "glass text-[var(--text-primary)] shadow-soft",
-          "hover:border-accent-violet/35",
-        ],
+        primary: "bg-black text-white hover:bg-neutral-800 hover:-translate-y-0.5",
+        light: "bg-white text-black hover:bg-neutral-200 hover:-translate-y-0.5",
+        outline:
+          "border border-current bg-transparent hover:bg-black hover:text-white hover:border-black",
+        "outline-light":
+          "border border-white/30 bg-transparent text-white hover:bg-white hover:text-black hover:border-white",
+        ghost: "hover:bg-black/5",
       },
       size: {
         sm: "h-9 px-4",

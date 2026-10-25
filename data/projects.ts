@@ -16,7 +16,7 @@ export const projects: readonly Project[] = [
     featured: true,
     tagline: "One platform, many hospitals, and data that never crosses between them.",
     description:
-      "A multi-tenant hospital management SaaS built on the MERN stack. Each hospital gets its own isolated data, and what a user can see or do is decided by both their role and the attributes of the record they are touching.",
+      "Designed and developed a multi-tenant Hospital Management SaaS platform using MERN, implementing schema-per-tenant data isolation and OAuth2 + JWT authentication. Implemented enterprise-grade authorization using RBAC and ABAC, enabling role-based dynamic UI rendering, protected APIs, and fine-grained access control across users.",
     problem:
       "Serving several hospitals from one deployment means two hard problems at once: tenant data must never bleed across boundaries, and doctor, receptionist and admin all need genuinely different views of the same screens — not a role check bolted on at the end.",
     solution:
@@ -74,7 +74,7 @@ export const projects: readonly Project[] = [
     links: {
       github: "https://github.com/faizanalam9835/CareEase",
       demo: "https://careease-app.vercel.app/",
-      caseStudy: "#projects",
+      caseStudy: "/projects",
     },
     preview: { accent: "violet", pattern: "orbit" },
   },
@@ -138,7 +138,7 @@ export const projects: readonly Project[] = [
     links: {
       github: "https://github.com/faizanalam9835/TaskTracker_Collaboration",
       demo: "https://task-traker-beta.vercel.app/",
-      caseStudy: "#projects",
+      caseStudy: "/projects",
     },
     preview: { accent: "blue", pattern: "grid" },
   },
@@ -201,7 +201,7 @@ export const projects: readonly Project[] = [
     links: {
       github: "https://github.com/faizanalam9835/Wellness-Tracker",
       demo: "https://wellness-tracker-mu.vercel.app/",
-      caseStudy: "#projects",
+      caseStudy: "/projects",
     },
     preview: { accent: "cyan", pattern: "bars" },
   },

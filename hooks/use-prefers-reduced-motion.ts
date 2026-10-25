@@ -1,12 +1,8 @@
 "use client";
 
-import { useMediaQuery } from "./use-media-query";
+import { useReducedMotion } from "framer-motion";
 
-/**
- * Single source of truth for motion preference. Framer variants, the 3D
- * canvases and the custom cursor all gate on this, matching the CSS
- * `prefers-reduced-motion` block in globals.css.
- */
+/** Single source of truth for motion preference. */
 export function usePrefersReducedMotion(): boolean {
-  return useMediaQuery("(prefers-reduced-motion: reduce)");
+  return useReducedMotion() ?? false;
 }

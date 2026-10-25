@@ -1,306 +1,219 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowDown, ArrowUpRight, Download, Sparkles } from "lucide-react";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import { ArrowDownRight, ArrowUpRight, MapPin } from "lucide-react";
+import Link from "next/link";
 import * as React from "react";
 
-import { HeroVisual } from "@/components/3d/hero-visual";
-import { Magnetic } from "@/components/shared/magnetic";
 import { Button } from "@/components/ui/button";
+import { Github, Linkedin } from "@/components/ui/brand-icons";
 import { siteConfig } from "@/data/site";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
-import { EASE_OUT_EXPO, staggerContainer, wordReveal } from "@/lib/motion";
-import { cn } from "@/lib/utils";
+import { introDelay } from "@/lib/intro";
+import { EASE_OUT_EXPO } from "@/lib/motion";
 
-const HEADLINE = `Hi, I'm ${siteConfig.firstName}. I build things for the web.`;
+const [firstName, ...rest] = siteConfig.name.split(" ");
+const lastName = rest.join(" ");
 
-/** Words that receive the gradient treatment in the headline. */
-const ACCENT_WORDS = new Set(["build", "things", "for", "the", "web."]);
+/** Flickers on like a sign: off, on, off, on. */
+const blink = {
+  initial: { opacity: 0 },
+  animate: { opacity: [0, 1, 0, 0.6, 0, 1] },
+};
 
-export function Hero() {
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const words = React.useMemo(() => HEADLINE.split(" "), []);
+/**
+ * Text only — the portrait itself is the fixed <PageBackdrop>. Copy sits
+ * either side of the face and each piece arrives its own way: from the
+ * top, from the sides, from below, or blinking on. All of it waits for the
+ * preloader on first load.
+ */
+export function Hero({ stats }: { stats: { value: string; label: string }[] }) {
+  const ref = React.useRef<HTMLElement>(null);
+  const reduced = usePrefersReducedMotion();
+  // Read once per mount so a client-side return to "/" doesn't wait again.
+  const [d] = React.useState(introDelay);
+
+  // Arriving on the home page always starts at the hero, never mid-page.
+  React.useEffect(() => {
+    if (!window.location.hash) window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
+
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
-    <section
-      id="home"
-      className="relative overflow-hidden px-5 pb-16 pt-24 sm:px-8 sm:pb-24 sm:pt-32 lg:min-h-[100svh] lg:px-12 lg:pb-28 lg:pt-36 xl:px-16"
-    >
-      {/* The blueprint grid is global now (<SiteBackdrop>); the hero only
-          adds its own light source on top of it. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-20"
-        style={{
-          background:
-            "radial-gradient(70% 55% at 22% 18%, rgb(124 92 246 / 0.08), transparent 70%)," +
-            "radial-gradient(55% 45% at 88% 28%, rgb(34 184 217 / 0.06), transparent 72%)",
-        }}
-      />
-
-      <div className="mx-auto w-full max-w-[88rem]">
-        <div className="grid items-center gap-10 sm:gap-14 lg:grid-cols-[1.25fr_0.75fr] lg:gap-16 xl:gap-20">
-          {/* ── Copy column ───────────────────────────────────────────── */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer(prefersReducedMotion ? 0 : 0.08, 0.05)}
-            className="flex flex-col items-start"
+    <section ref={ref} id="home" className="relative h-[100svh] min-h-[640px] overflow-hidden">
+      <motion.div
+        style={reduced ? undefined : { y: contentY, opacity: contentOpacity }}
+        className="relative z-10 flex h-full w-full flex-col justify-end gap-5 px-5 pb-8 pt-28 sm:pb-12 sm:px-10 lg:flex-row lg:items-center lg:justify-between lg:px-16 lg:pb-0"
+      >
+        {/* Left */}
+        <div className="lg:max-w-xl">
+          <motion.p
+            {...blink}
+            transition={{ duration: 0.9, delay: d + 0.2, times: [0, 0.2, 0.35, 0.5, 0.65, 1] }}
+            className="hidden items-center gap-2 rounded-md border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium backdrop-blur-md lg:inline-flex"
           >
-            <StatusBadge />
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex size-full animate-ping rounded-md bg-white opacity-70" />
+              <span className="relative inline-flex size-2 rounded-md bg-white" />
+            </span>
+            {siteConfig.availability}
+          </motion.p>
 
-            <h1 className="mt-6 text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.03em] text-[var(--text-primary)] sm:mt-7 sm:text-[3.15rem] lg:text-[3.6rem] xl:text-[4rem]">
-              <span className="sr-only">{HEADLINE}</span>
-              <span aria-hidden className="inline-flex flex-wrap">
-                {words.map((word, index) => (
-                  <span
-                    key={`${word}-${index}`}
-                    className="mr-[0.26em] inline-block overflow-hidden pb-[0.06em]"
-                  >
-                    <motion.span
-                      variants={prefersReducedMotion ? undefined : wordReveal}
-                      className={cn(
-                        "inline-block",
-                        ACCENT_WORDS.has(word) && "text-gradient",
-                      )}
-                    >
-                      {word}
-                    </motion.span>
-                  </span>
-                ))}
-              </span>
-            </h1>
+          <motion.p
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: d + 0.3, ease: EASE_OUT_EXPO }}
+            className="font-mono text-xs uppercase lg:mt-6 tracking-[0.3em] text-white/50"
+          >
+            Hi, I&rsquo;m
+          </motion.p>
 
-            <motion.p
-              variants={{
-                hidden: { opacity: 0, y: 16 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.7, ease: EASE_OUT_EXPO, delay: 0.35 },
-                },
-              }}
-              className="mt-5 max-w-2xl text-[0.9375rem] leading-relaxed text-[var(--text-secondary)] sm:mt-6 sm:text-[1.0625rem]"
-            >
-              {siteConfig.tagline}
-            </motion.p>
-
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 16 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.7, ease: EASE_OUT_EXPO, delay: 0.48 },
-                },
-              }}
-              className="mt-8 flex w-full flex-wrap items-center gap-2.5 sm:mt-9 sm:gap-3"
-            >
-              <Magnetic strength={10} contentStrength={4}>
-                <Button
-                  asChild
-                  variant="accent"
-                  size="lg"
-                  className="group h-11 px-5 text-sm sm:h-13 sm:px-7 sm:text-[0.95rem]"
+          <h1 className="mt-2 font-display text-5xl font-bold uppercase leading-[0.9] tracking-tight sm:text-7xl xl:text-8xl">
+            {/* First name: each letter drops in from above. */}
+            <span className="inline-block overflow-hidden align-bottom" aria-label={firstName}>
+              {(firstName ?? "").split("").map((char, i) => (
+                <motion.span
+                  key={i}
+                  aria-hidden
+                  initial={{ y: "-110%" }}
+                  animate={{ y: "0%" }}
+                  transition={{ duration: 0.9, delay: d + 0.4 + i * 0.05, ease: EASE_OUT_EXPO }}
+                  className="inline-block"
                 >
-                  <a href="#projects" data-cursor-label="View">
-                    See my work
-                    <ArrowUpRight className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </a>
-                </Button>
-              </Magnetic>
-
-              <Magnetic strength={10} contentStrength={4}>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="h-11 px-5 text-sm sm:h-13 sm:px-7 sm:text-[0.95rem]"
-                >
-                  <a href="#contact" data-cursor-label="Talk">
-                    Get in touch
-                  </a>
-                </Button>
-              </Magnetic>
-
-              <Button
-                asChild
-                variant="ghost"
-                size="lg"
-                className="group h-11 px-4 text-sm sm:h-13 sm:px-7 sm:text-[0.95rem]"
-              >
-                <a
-                  href={siteConfig.resumeUrl}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  data-cursor-label="Open"
-                >
-                  <Download className="transition-transform duration-300 group-hover:translate-y-0.5" />
-                  Resume
-                </a>
-              </Button>
-            </motion.div>
-
-            <motion.div
-              variants={{
-                hidden: { opacity: 0 },
-                visible: { opacity: 1, transition: { duration: 0.9, delay: 0.7 } },
-              }}
-              className="mt-10 w-full sm:mt-12"
+                  {char}
+                </motion.span>
+              ))}
+            </span>
+            <br />
+            {/* Last name: slides in from the left, outlined. */}
+            <motion.span
+              initial={{ x: "-120%", opacity: 0 }}
+              animate={{ x: "0%", opacity: 1 }}
+              transition={{ duration: 1.1, delay: d + 0.7, ease: EASE_OUT_EXPO }}
+              className="text-outline inline-block"
             >
-              <RoleTicker titles={siteConfig.titles} paused={prefersReducedMotion} />
-            </motion.div>
+              {lastName}
+            </motion.span>
+          </h1>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: d + 1, ease: EASE_OUT_EXPO }}
+          >
+            <RotatingTitle />
           </motion.div>
 
-          {/* ── Portrait column ───────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.1, ease: EASE_OUT_EXPO, delay: 0.15 }}
-            className="relative order-first w-full lg:order-last"
+          <motion.p
+            {...blink}
+            transition={{ duration: 0.8, delay: d + 1.3 }}
+            className="mt-4 hidden items-center gap-1.5 text-sm text-white/50 lg:flex"
           >
-            <HeroVisual className="mx-auto w-[68%] max-w-[16rem] sm:w-[52%] sm:max-w-[21rem] lg:w-full lg:max-w-[24rem] xl:max-w-[26rem]" />
-          </motion.div>
+            <MapPin className="size-4" /> {siteConfig.location}
+          </motion.p>
         </div>
-      </div>
 
-      <ScrollCue />
+        {/* Right */}
+        <div className="lg:max-w-sm lg:text-right">
+          <motion.p
+            initial={{ opacity: 0, x: 80 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: d + 0.6, ease: EASE_OUT_EXPO }}
+            className="hidden text-base leading-relaxed text-white/75 lg:block"
+          >
+            {siteConfig.tagline}
+          </motion.p>
+
+          <dl className="mt-6 hidden grid-cols-2 gap-3 lg:grid">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                {...blink}
+                transition={{ duration: 0.8, delay: d + 1 + i * 0.2 }}
+                className="rounded-md border border-white/10 bg-white/5 p-3 text-left backdrop-blur-md"
+              >
+                <dt className="text-[0.7rem] uppercase tracking-wider text-white/50">{stat.label}</dt>
+                <dd className="mt-1 font-display text-2xl font-semibold">{stat.value}</dd>
+              </motion.div>
+            ))}
+          </dl>
+
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: d + 1.2, ease: EASE_OUT_EXPO }}
+            className="flex gap-3 lg:mt-6 lg:justify-end"
+          >
+            <Button asChild variant="light" size="lg" className="group flex-1 lg:flex-none">
+              <Link href="/projects">
+                View my work
+                <ArrowDownRight className="transition-transform duration-300 group-hover:rotate-[-45deg]" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline-light" size="lg" className="flex-1 lg:flex-none">
+              <Link href="/resume">
+                Resume <ArrowUpRight />
+              </Link>
+            </Button>
+          </motion.div>
+
+          <div className="mt-3 flex gap-2 lg:mt-5 lg:justify-end">
+            {[
+              { href: siteConfig.github, label: "GitHub", Icon: Github },
+              { href: siteConfig.linkedin, label: "LinkedIn", Icon: Linkedin },
+            ].map(({ href, label, Icon }, i) => (
+              <motion.a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={label}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15, delay: d + 1.4 + i * 0.1 }}
+                className="grid size-10 place-items-center rounded-md border border-white/15 transition-colors duration-300 hover:bg-white hover:text-black"
+              >
+                <Icon className="size-4" />
+              </motion.a>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
     </section>
   );
 }
 
-function StatusBadge() {
-  return (
-    <motion.a
-      href="#contact"
-      variants={{
-        hidden: { opacity: 0, y: 12 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.6, ease: EASE_OUT_EXPO },
-        },
-      }}
-      className={cn(
-        "group inline-flex items-center gap-2.5 rounded-full py-1.5 pl-2 pr-4",
-        "glass text-[0.8125rem] font-medium text-[var(--text-secondary)]",
-        "shadow-soft transition-colors duration-300 hover:text-[var(--text-primary)]",
-      )}
-    >
-      <span className="relative grid size-5 place-items-center" aria-hidden>
-        <span className="absolute size-2 rounded-full bg-emerald-500/60 motion-safe:animate-[pulse-ring_2.4s_cubic-bezier(0.16,1,0.3,1)_infinite]" />
-        <span className="size-2 rounded-full bg-emerald-500" />
-      </span>
-      {siteConfig.availability}
-      <ArrowUpRight className="size-3.5 opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-70" />
-    </motion.a>
-  );
-}
-
-/**
- * Slow vertical ticker of role titles.
- *
- * Alignment notes, since this line sat crooked before:
- *  - The row is `items-center`, not `items-baseline`. An `overflow-hidden`
- *    box reports its bottom edge as its baseline, so baseline alignment
- *    pushed the rotating title below "Currently".
- *  - The viewport is exactly `h-6` and every title is `leading-6`, so one
- *    step of the animation is exactly one line height.
- *  - Each title is `absolute inset-0`, so it fills the viewport and the
- *    `y: 100%` steps land precisely instead of drifting.
- *  - An invisible copy of the longest title sets the width, so the box
- *    never resizes as the titles cycle.
- */
-function RoleTicker({
-  titles,
-  paused,
-}: {
-  titles: readonly string[];
-  paused: boolean;
-}) {
+/** Cycles through the role titles, each sliding up out of a mask. */
+function RotatingTitle() {
   const [index, setIndex] = React.useState(0);
 
-  const longest = React.useMemo(
-    () =>
-      titles.reduce(
-        (widest, title) => (title.length > widest.length ? title : widest),
-        titles[0] ?? "",
-      ),
-    [titles],
-  );
-
   React.useEffect(() => {
-    if (paused || titles.length < 2) return;
-    const timer = setInterval(
-      () => setIndex((current) => (current + 1) % titles.length),
-      2800,
+    const id = window.setInterval(
+      () => setIndex((i) => (i + 1) % siteConfig.titles.length),
+      2600,
     );
-    return () => clearInterval(timer);
-  }, [paused, titles.length]);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
-    <div className="flex items-center gap-3 border-t border-[var(--border-subtle)] pt-6">
-      <Sparkles
-        className="size-4 shrink-0 text-accent-violet"
-        aria-hidden
-      />
-
-      <p className="flex min-w-0 items-center gap-2 text-sm leading-6 text-[var(--text-tertiary)]">
-        <span className="shrink-0">Currently</span>
-
-        {/* Static text for assistive tech; the animated stack is decorative. */}
-        <span className="sr-only">{titles[index]}</span>
-
-        <span
-          aria-hidden
-          className="relative block h-6 overflow-hidden"
+    <div className="mt-3 flex h-8 items-center gap-3 overflow-hidden lg:mt-5">
+      <span className="h-px w-8 bg-white/50" />
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={index}
+          initial={{ y: "100%", opacity: 0 }}
+          animate={{ y: "0%", opacity: 1 }}
+          exit={{ y: "-100%", opacity: 0 }}
+          transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+          className="text-base font-medium text-white/85 lg:text-lg"
         >
-          {/* Sizer: reserves the width of the longest title so nothing shifts. */}
-          <span className="invisible block whitespace-nowrap text-sm font-medium leading-6">
-            {longest}
-          </span>
-
-          {titles.map((title, titleIndex) => (
-            <motion.span
-              key={title}
-              initial={false}
-              animate={{
-                y: paused ? 0 : `${(titleIndex - index) * 100}%`,
-                opacity: titleIndex === index ? 1 : 0,
-              }}
-              transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
-              className="absolute inset-0 whitespace-nowrap text-sm font-medium leading-6 text-[var(--text-primary)]"
-            >
-              {title}
-            </motion.span>
-          ))}
-        </span>
-      </p>
+          {siteConfig.titles[index]}
+        </motion.span>
+      </AnimatePresence>
     </div>
-  );
-}
-
-function ScrollCue() {
-  return (
-    <motion.a
-      href="#about"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1.4, duration: 0.8 }}
-      aria-label="Scroll to about section"
-      className={cn(
-        "absolute bottom-7 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2",
-        "text-[0.6875rem] uppercase tracking-[0.18em] text-[var(--text-tertiary)]",
-        "transition-colors duration-300 hover:text-[var(--text-secondary)] lg:flex",
-      )}
-    >
-      Scroll
-      <motion.span
-        animate={{ y: [0, 6, 0] }}
-        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <ArrowDown className="size-3.5" aria-hidden />
-      </motion.span>
-    </motion.a>
   );
 }

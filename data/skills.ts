@@ -1,64 +1,108 @@
-import { Brain, Database, Layers, Server, Wrench } from "lucide-react";
+import { Brain, Code2, Database, HeartHandshake, Palette, Wrench } from "lucide-react";
 
 import type { SkillCategory } from "@/types";
 
 /**
- * Kept deliberately short and honest — the tools I actually reach for,
- * not everything I've ever opened a tutorial on.
+ * Mirrors the Technical Skills on the resume (`public/resume.pdf`), plus
+ * the Generative AI work and the soft skills listed there.
  *
  * `projects` entries are ids from `data/projects.ts`.
  */
 export const skillCategories: readonly SkillCategory[] = [
   {
-    id: "frontend",
-    label: "Frontend",
-    blurb: "Where I spend most of my time.",
-    icon: Layers,
+    id: "languages",
+    label: "Languages & Frameworks",
+    blurb: "The core of everything I build, front to back.",
+    icon: Code2,
     accent: "blue",
     skills: [
+      {
+        name: "JavaScript",
+        level: "Advanced",
+        proficiency: 86,
+        years: 2,
+        description: "ES6+, async patterns, and the language quirks that bite you in reviews.",
+        projects: ["task-tracker", "wellness-tracker"],
+      },
+      {
+        name: "TypeScript",
+        level: "Proficient",
+        proficiency: 76,
+        years: 1,
+        description: "Typing props, API responses and shared helpers across the stack.",
+        projects: ["care-ease"],
+      },
+      {
+        name: "React.js",
+        level: "Advanced",
+        proficiency: 85,
+        years: 2,
+        description: "Components, hooks, routing with React Router v6 and keeping re-renders in check.",
+        projects: ["care-ease", "task-tracker", "wellness-tracker"],
+      },
       {
         name: "Next.js",
         level: "Proficient",
         proficiency: 80,
         years: 1,
-        description:
-          "App Router, server components, streaming and caching — this site is built on it.",
-        projects: ["care-ease"],
+        description: "App Router, server components, route handlers and caching — this site runs on it.",
+        projects: [],
       },
       {
-        name: "React",
+        name: "Node.js",
         level: "Proficient",
-        proficiency: 82,
-        years: 1,
-        description:
-          "Components, hooks, state management and keeping re-renders under control.",
-        projects: ["care-ease", "task-tracker", "wellness-tracker"],
-      },
-      {
-        name: "TypeScript",
-        level: "Proficient",
-        proficiency: 74,
-        years: 1,
-        description:
-          "Typing props, API responses and shared helpers — still learning the deeper generics.",
+        proficiency: 80,
+        years: 2,
+        description: "Server-side JavaScript, async flows and backend services.",
         projects: ["care-ease", "task-tracker"],
       },
       {
-        name: "JavaScript",
+        name: "Express.js",
         level: "Proficient",
+        proficiency: 80,
+        years: 2,
+        description: "Routing, middleware, validation at the boundary and consistent error responses.",
+        projects: ["care-ease", "task-tracker"],
+      },
+    ],
+  },
+  {
+    id: "web",
+    label: "Web & Styling",
+    blurb: "Responsive, accessible interfaces and clean APIs.",
+    icon: Palette,
+    accent: "violet",
+    skills: [
+      {
+        name: "HTML5",
+        level: "Advanced",
+        proficiency: 88,
+        years: 2,
+        description: "Semantic, accessible, keyboard-friendly markup.",
+        projects: ["task-tracker"],
+      },
+      {
+        name: "CSS3",
+        level: "Advanced",
         proficiency: 85,
         years: 2,
-        description:
-          "ES6+, async patterns, and the language quirks that bite you in reviews.",
-        projects: ["task-tracker"],
+        description: "Flexbox, grid, animations and responsive layouts.",
+        projects: ["wellness-tracker"],
+      },
+      {
+        name: "Tailwind CSS",
+        level: "Advanced",
+        proficiency: 86,
+        years: 2,
+        description: "Design tokens, responsive utilities and a consistent component look.",
+        projects: ["care-ease", "wellness-tracker"],
       },
       {
         name: "Chakra UI",
         level: "Proficient",
         proficiency: 72,
         years: 1,
-        description:
-          "Component library work — theming, responsive props and accessible defaults.",
+        description: "Theming, responsive props and accessible component defaults.",
         projects: [],
       },
       {
@@ -70,174 +114,62 @@ export const skillCategories: readonly SkillCategory[] = [
         projects: [],
       },
       {
-        name: "Tailwind CSS",
-        level: "Proficient",
-        proficiency: 84,
-        years: 1,
-        description:
-          "Responsive layouts, design tokens and building a consistent component look.",
-        projects: ["wellness-tracker"],
-      },
-      {
-        name: "HTML & CSS",
-        level: "Proficient",
-        proficiency: 86,
-        years: 2,
-        description:
-          "Semantic markup, flexbox and grid, and accessible, keyboard-friendly UI.",
-        projects: ["task-tracker"],
-      },
-    ],
-  },
-  {
-    id: "backend",
-    label: "Backend",
-    blurb: "APIs and the logic behind the screens.",
-    icon: Server,
-    accent: "violet",
-    skills: [
-      {
-        name: "Next.js (Server)",
-        level: "Proficient",
-        proficiency: 76,
-        years: 1,
-        description:
-          "Route handlers, server actions and server components — the API layer without a separate server.",
-        projects: [],
-      },
-      {
-        name: "Node.js",
-        level: "Proficient",
-        proficiency: 76,
-        years: 1,
-        description:
-          "Server-side JavaScript, async flows, file and stream handling.",
-        projects: ["task-tracker", "care-ease"],
-      },
-      {
-        name: "Express.js",
-        level: "Proficient",
-        proficiency: 78,
-        years: 1,
-        description:
-          "Routing, middleware, validation at the boundary and consistent error responses.",
-        projects: ["task-tracker"],
-      },
-      {
         name: "REST APIs",
         level: "Proficient",
-        proficiency: 76,
-        years: 1,
-        description:
-          "Designing endpoints, status codes, pagination and predictable response shapes.",
-        projects: ["task-tracker", "wellness-tracker"],
+        proficiency: 82,
+        years: 2,
+        description: "Endpoint design, status codes, pagination and predictable response shapes.",
+        projects: ["care-ease", "task-tracker"],
       },
       {
-        name: "Authentication",
-        level: "Foundational",
-        proficiency: 65,
+        name: "GraphQL",
+        level: "Proficient",
+        proficiency: 74,
         years: 1,
-        description:
-          "JWT and session auth, password hashing, protected routes and role checks.",
-        projects: ["task-tracker"],
+        description: "Schemas, queries, mutations and resolvers — clients fetch exactly the data they need.",
+        projects: [],
       },
     ],
   },
   {
     id: "database",
-    label: "Database",
+    label: "Databases",
     blurb: "Modelling data so it holds up later.",
     icon: Database,
     accent: "cyan",
     skills: [
       {
+        name: "PostgreSQL",
+        level: "Advanced",
+        proficiency: 85,
+        years: 1,
+        description:
+          "Relational schema design, joins, constraints, indexes and transactions — one of my strongest tools.",
+        projects: [],
+      },
+      {
+        name: "SQL",
+        level: "Advanced",
+        proficiency: 84,
+        years: 1,
+        description: "Writing and tuning queries: joins, aggregates, subqueries and window functions.",
+        projects: [],
+      },
+      {
         name: "MongoDB",
         level: "Proficient",
-        proficiency: 76,
-        years: 1,
-        description:
-          "Schema design with Mongoose, indexes and basic aggregation pipelines.",
-        projects: ["task-tracker", "care-ease"],
-      },
-      {
-        name: "SQL / PostgreSQL",
-        level: "Foundational",
-        proficiency: 58,
-        years: 1,
-        description:
-          "Joins, constraints and normalised schema design — comfortable, not fluent.",
-        projects: ["wellness-tracker"],
-      },
-      {
-        name: "Mongoose",
-        level: "Proficient",
-        proficiency: 74,
-        years: 1,
-        description:
-          "Schemas, validation, population and scoping every query to its owner.",
-        projects: ["task-tracker", "care-ease"],
+        proficiency: 82,
+        years: 2,
+        description: "Mongoose schemas, indexes, aggregation and per-tenant data isolation.",
+        projects: ["care-ease", "task-tracker"],
       },
       {
         name: "Firebase",
         level: "Foundational",
-        proficiency: 55,
+        proficiency: 60,
         years: 1,
-        description: "Auth and hosting basics on smaller builds.",
+        description: "Auth and hosting on smaller builds.",
         projects: [],
-      },
-      {
-        name: "Database Design",
-        level: "Foundational",
-        proficiency: 62,
-        years: 1,
-        description:
-          "Choosing relationships and indexes for the queries a feature actually runs.",
-        projects: ["task-tracker"],
-      },
-    ],
-  },
-  {
-    id: "ai",
-    label: "AI / RAG",
-    blurb: "The part I'm most curious about right now.",
-    icon: Brain,
-    accent: "violet",
-    skills: [
-      {
-        name: "LLM APIs",
-        level: "Proficient",
-        proficiency: 72,
-        years: 1,
-        description:
-          "Calling chat and embedding APIs, streaming responses, handling failures and cost.",
-        projects: ["care-ease"],
-      },
-      {
-        name: "RAG",
-        level: "Foundational",
-        proficiency: 64,
-        years: 1,
-        description:
-          "Chunking, embedding, retrieval and grounding answers in sources you can cite.",
-        projects: ["care-ease"],
-      },
-      {
-        name: "Vector Search",
-        level: "Foundational",
-        proficiency: 58,
-        years: 1,
-        description:
-          "Storing embeddings and running similarity search over them.",
-        projects: ["care-ease"],
-      },
-      {
-        name: "Prompt Engineering",
-        level: "Proficient",
-        proficiency: 70,
-        years: 1,
-        description:
-          "Structuring prompts and output formats so responses stay parseable.",
-        projects: ["care-ease"],
       },
     ],
   },
@@ -249,47 +181,117 @@ export const skillCategories: readonly SkillCategory[] = [
     accent: "blue",
     skills: [
       {
-        name: "Git & GitHub",
+        name: "Git",
         level: "Proficient",
-        proficiency: 80,
+        proficiency: 82,
         years: 2,
-        description:
-          "Branching, rebasing, resolving conflicts and writing reviewable PRs.",
+        description: "Branching, rebasing and resolving conflicts cleanly.",
         projects: ["task-tracker"],
       },
       {
-        name: "Vercel",
+        name: "GitHub",
         level: "Proficient",
-        proficiency: 74,
-        years: 1,
-        description:
-          "Deploying Next.js apps, preview builds and environment configuration.",
-        projects: ["wellness-tracker"],
-      },
-      {
-        name: "Vite",
-        level: "Proficient",
-        proficiency: 76,
-        years: 1,
-        description: "Fast dev server and build tooling for React SPAs.",
-        projects: ["task-tracker"],
-      },
-      {
-        name: "Postman",
-        level: "Proficient",
-        proficiency: 78,
-        years: 1,
-        description:
-          "Testing endpoints, collections and debugging request/response payloads.",
-        projects: ["task-tracker"],
+        proficiency: 82,
+        years: 2,
+        description: "Pull requests, reviews and keeping a readable history.",
+        projects: ["care-ease"],
       },
       {
         name: "Docker",
         level: "Foundational",
-        proficiency: 50,
+        proficiency: 60,
         years: 1,
-        description:
-          "Running services locally from a compose file — still early days here.",
+        description: "Containerising apps and running services from a compose file.",
+        projects: [],
+      },
+      {
+        name: "n8n",
+        level: "Proficient",
+        proficiency: 72,
+        years: 1,
+        description: "Workflow automation — wiring APIs, webhooks and AI steps into hands-off pipelines.",
+        projects: [],
+      },
+    ],
+  },
+  {
+    id: "ai",
+    label: "Generative AI",
+    blurb: "Using AI well — in products and in how I learn new stacks fast.",
+    icon: Brain,
+    accent: "violet",
+    skills: [
+      {
+        name: "LLM APIs",
+        level: "Proficient",
+        proficiency: 74,
+        years: 1,
+        description: "Calling chat and embedding APIs, streaming responses, handling failures and cost.",
+        projects: [],
+      },
+      {
+        name: "Prompt Engineering",
+        level: "Proficient",
+        proficiency: 76,
+        years: 1,
+        description: "Structuring prompts and output formats so responses stay reliable and parseable.",
+        projects: [],
+      },
+      {
+        name: "RAG",
+        level: "Foundational",
+        proficiency: 64,
+        years: 1,
+        description: "Chunking, embedding and retrieval to ground answers in real sources.",
+        projects: [],
+      },
+    ],
+  },
+  {
+    id: "soft",
+    label: "Soft Skills",
+    blurb: "How I work with people, not just code.",
+    icon: HeartHandshake,
+    accent: "cyan",
+    skills: [
+      {
+        name: "Problem Solving",
+        level: "Advanced",
+        proficiency: 88,
+        years: 2,
+        description: "Breaking a messy problem into small, testable pieces.",
+        projects: [],
+      },
+      {
+        name: "Adaptability",
+        level: "Advanced",
+        proficiency: 86,
+        years: 2,
+        description: "Picking up new tech stacks quickly when the work calls for it.",
+        projects: [],
+      },
+      {
+        name: "Attention to Detail",
+        level: "Advanced",
+        proficiency: 85,
+        years: 2,
+        description: "Edge cases, consistent UI and code that's easy to review.",
+        projects: [],
+      },
+      {
+        name: "Effective Communication",
+        level: "Proficient",
+        proficiency: 82,
+        years: 2,
+        description: "Asking questions early and explaining trade-offs clearly.",
+        projects: [],
+      },
+      {
+        name: "Time Management",
+        level: "Proficient",
+        proficiency: 80,
+        years: 2,
+        description: "Shipping on time while studying and working full time.",
         projects: [],
       },
     ],

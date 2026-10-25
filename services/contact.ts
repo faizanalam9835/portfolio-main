@@ -9,6 +9,8 @@ import type { ContactInput } from "@/lib/validations";
  * Two transports, chosen by whichever env vars exist — no credentials ever
  * reach the client, and no third-party SDK is required to run the site:
  *
+ *   EMAILJS_SERVICE_ID + EMAILJS_TEMPLATE_ID + EMAILJS_PUBLIC_KEY
+ *     + EMAILJS_PRIVATE_KEY            → email via EmailJS's REST API
  *   RESEND_API_KEY + CONTACT_TO_EMAIL  → email via Resend's REST API
  *   CONTACT_WEBHOOK_URL                → POST to a webhook (Slack, Discord, n8n…)
  *
@@ -16,7 +18,7 @@ import type { ContactInput } from "@/lib/validations";
  * still succeeds, so the form is demoable immediately after cloning.
  */
 
-export type DeliveryChannel = "resend" | "webhook" | "log";
+export type DeliveryChannel = "emailjs" | "resend" | "webhook" | "log";
 
 export interface DeliveryResult {
   delivered: boolean;
@@ -29,6 +31,7 @@ function buildPlainText(input: ContactInput, meta: RequestMeta): string {
     ``,
     `Name:    ${input.name}`,
     `Email:   ${input.email}`,
+    `Phone:   ${input.phone || "—"}`,
     `Sent:    ${meta.receivedAt}`,
     `Source:  ${meta.origin ?? "unknown"}`,
     ``,
@@ -56,6 +59,7 @@ function buildHtml(input: ContactInput, meta: RequestMeta): string {
       <table style="border-collapse:collapse;font-size:14px;margin-bottom:20px">
         <tr><td style="padding:4px 16px 4px 0;color:#6b7280">Name</td><td>${escapeHtml(input.name)}</td></tr>
         <tr><td style="padding:4px 16px 4px 0;color:#6b7280">Email</td><td>${escapeHtml(input.email)}</td></tr>
+        <tr><td style="padding:4px 16px 4px 0;color:#6b7280">Phone</td><td>${escapeHtml(input.phone || "—")}</td></tr>
         <tr><td style="padding:4px 16px 4px 0;color:#6b7280">Received</td><td>${escapeHtml(meta.receivedAt)}</td></tr>
       </table>
       <div style="padding:16px;background:#fafafa;border:1px solid #ebedf0;border-radius:12px;font-size:14px">
@@ -68,6 +72,50 @@ function buildHtml(input: ContactInput, meta: RequestMeta): string {
 export interface RequestMeta {
   receivedAt: string;
   origin?: string | undefined;
+}
+
+/**
+ * EmailJS, called from the server so the keys never reach the browser.
+ * Requires "Allow EmailJS API for non-browser applications" in the
+ * EmailJS dashboard (Account → Security). The template receives
+ * {{from_name}}, {{from_email}}, {{reply_to}}, {{phone}}, {{message}} and
+ * {{time}} ({{name}}, {{email}} and {{phone_number}} as aliases).
+ */
+async function sendViaEmailJS(input: ContactInput, meta: RequestMeta): Promise<boolean> {
+  const serviceId = process.env.EMAILJS_SERVICE_ID;
+  const templateId = process.env.EMAILJS_TEMPLATE_ID;
+  const publicKey = process.env.EMAILJS_PUBLIC_KEY;
+  const privateKey = process.env.EMAILJS_PRIVATE_KEY;
+  if (!serviceId || !templateId || !publicKey || !privateKey) return false;
+
+  const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      service_id: serviceId,
+      template_id: templateId,
+      user_id: publicKey,
+      accessToken: privateKey,
+      template_params: {
+        from_name: input.name,
+        from_email: input.email,
+        reply_to: input.email,
+        name: input.name,
+        email: input.email,
+        phone: input.phone || "Not provided",
+        phone_number: input.phone || "Not provided",
+        message: input.message,
+        time: meta.receivedAt,
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const detail = await response.text().catch(() => "");
+    throw new Error(`EmailJS responded ${response.status}: ${detail.slice(0, 200)}`);
+  }
+
+  return true;
 }
 
 async function sendViaResend(
@@ -135,6 +183,11 @@ export async function deliverContactMessage(
   input: ContactInput,
   meta: RequestMeta,
 ): Promise<DeliveryResult> {
+  if (process.env.EMAILJS_SERVICE_ID && process.env.EMAILJS_TEMPLATE_ID) {
+    const delivered = await sendViaEmailJS(input, meta);
+    if (delivered) return { delivered: true, channel: "emailjs" };
+  }
+
   if (process.env.RESEND_API_KEY && process.env.CONTACT_TO_EMAIL) {
     const delivered = await sendViaResend(input, meta);
     if (delivered) return { delivered: true, channel: "resend" };

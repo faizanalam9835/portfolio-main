@@ -1,223 +1,82 @@
-"use client";
-
-import { motion } from "framer-motion";
-import {
-  Award,
-  ExternalLink,
-  GraduationCap,
-  MapPin,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowUpRight, Award, GraduationCap, MapPin } from "lucide-react";
 
 import { RevealGroup, RevealItem } from "@/components/shared/reveal";
-import { Section, SectionHeading } from "@/components/shared/section-heading";
-import { Badge } from "@/components/ui/badge";
+import { sectionClass, SectionTitle } from "@/components/shared/section-title";
 import { certifications, education } from "@/data/education";
-import { EASE_OUT_EXPO, fadeUp } from "@/lib/motion";
-import { cn } from "@/lib/utils";
-import type { CertificationItem, EducationItem } from "@/types";
-
-const ACCENT_RING = {
-  blue: "group-hover:border-accent-blue/40",
-  violet: "group-hover:border-accent-violet/40",
-  cyan: "group-hover:border-accent-cyan/40",
-} as const;
-
-const ACCENT_ICON = {
-  blue: "bg-accent-blue/10 text-accent-blue",
-  violet: "bg-accent-violet/10 text-accent-violet",
-  cyan: "bg-accent-cyan/10 text-accent-cyan",
-} as const;
-
-const ACCENT_BADGE = {
-  blue: "blue",
-  violet: "violet",
-  cyan: "cyan",
-} as const;
 
 export function Education() {
   return (
-    <Section id="education">
-      <SectionHeading
-        index="05"
-        eyebrow="Background"
-        title="Education & Certifications"
-        lead="Where I studied, and the courses I've finished alongside the actual building."
-      />
+    <section id="education" className={sectionClass}>
+      <div className="w-full">
+        <SectionTitle index="05" eyebrow="Education" title="Learning, formally and otherwise" />
 
-      <div className="mt-10 grid gap-10 sm:mt-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
-        {/* ── Education timeline ──────────────────────────────────────── */}
-        <div>
-          <h3 className="flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--text-tertiary)]">
-            <GraduationCap className="size-4 text-accent-blue" aria-hidden />
-            Education
-          </h3>
-
-          <RevealGroup className="mt-6 flex flex-col gap-5" stagger={0.12}>
-            {education.map((item) => (
-              <RevealItem key={item.id} variants={fadeUp}>
-                <EducationCard item={item} />
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </div>
-
-        {/* ── Certifications ──────────────────────────────────────────── */}
-        <div>
-          <h3 className="flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--text-tertiary)]">
-            <Award className="size-4 text-accent-violet" aria-hidden />
-            Certifications
-          </h3>
-
-          <RevealGroup className="mt-6 flex flex-col gap-4" stagger={0.1}>
-            {certifications.map((item) => (
-              <RevealItem key={item.id} variants={fadeUp}>
-                <CertificationCard item={item} />
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </div>
-      </div>
-    </Section>
-  );
-}
-
-function EducationCard({ item }: { item: EducationItem }) {
-  return (
-    <motion.article
-      whileHover={{ y: -2 }}
-      transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-      className={cn(
-        "group card-surface relative overflow-hidden p-5 sm:p-6",
-        "transition-colors duration-300 hover:border-accent-blue/30",
-      )}
-    >
-      {/* Accent rail on the left edge. */}
-      <span
-        aria-hidden
-        className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-accent-blue via-accent-violet to-transparent opacity-40 transition-opacity duration-300 group-hover:opacity-100"
-      />
-
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-base font-semibold tracking-tight text-[var(--text-primary)]">
-            {item.degree}
-          </p>
-          <p className="mt-0.5 text-sm text-[var(--text-secondary)]">
-            {item.field}
-          </p>
-        </div>
-
-        {item.score ? (
-          <Badge variant="blue" size="sm" className="shrink-0 font-mono">
-            {item.score}
-          </Badge>
-        ) : null}
-      </div>
-
-      <p className="mt-3 text-sm font-medium text-[var(--text-primary)]">
-        {item.institution}
-      </p>
-
-      <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[0.75rem] text-[var(--text-tertiary)]">
-        <span className="font-mono">{item.duration}</span>
-        <span className="inline-flex items-center gap-1.5">
-          <MapPin className="size-3" aria-hidden />
-          {item.location}
-        </span>
-        {item.current ? (
-          <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
-            <span className="size-1.5 rounded-full bg-emerald-500" aria-hidden />
-            Ongoing
-          </span>
-        ) : null}
-      </div>
-
-      {item.highlights.length ? (
-        <ul className="mt-4 flex flex-col gap-2 border-t border-[var(--border-subtle)] pt-4">
-          {item.highlights.map((highlight) => (
-            <li
-              key={highlight}
-              className="flex items-start gap-2.5 text-[0.8125rem] leading-relaxed text-[var(--text-secondary)]"
+        <RevealGroup className="grid gap-3 lg:grid-cols-3">
+          {education.map((item) => (
+            <RevealItem
+              key={item.id}
+              className="frame group flex flex-col rounded-md bg-white p-7 text-black transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[8px_8px_0_0_rgba(255,255,255,0.35)]"
             >
-              <span
-                aria-hidden
-                className="mt-[0.45rem] size-1 shrink-0 rounded-full bg-accent-violet/60"
-              />
-              {highlight}
-            </li>
+              <div className="flex items-center justify-between">
+                <span className="grid size-11 place-items-center rounded-md bg-black text-white">
+                  <GraduationCap className="size-5" />
+                </span>
+                {item.current ? (
+                  <span className="rounded-md border border-black px-2 py-0.5 text-[0.7rem] font-semibold uppercase">
+                    Ongoing
+                  </span>
+                ) : null}
+              </div>
+              <p className="mt-6 font-mono text-xs uppercase tracking-wider text-black/45">
+                {item.duration}
+              </p>
+              <h3 className="mt-2 font-display text-xl font-semibold leading-tight">{item.degree}</h3>
+              <p className="mt-1 text-sm text-black/60">{item.field}</p>
+              <p className="mt-4 font-medium">{item.institution}</p>
+              <p className="mt-1 flex items-center gap-1 text-xs text-black/45">
+                <MapPin className="size-3.5" /> {item.location}
+              </p>
+              <ul className="mt-5 space-y-2 border-t border-black/10 pt-5">
+                {item.highlights.map((h) => (
+                  <li key={h} className="flex gap-2.5 text-sm leading-relaxed text-black/65">
+                    <span className="mt-2 size-1 shrink-0 rounded-md bg-black" />
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            </RevealItem>
           ))}
-        </ul>
-      ) : null}
-    </motion.article>
-  );
-}
+        </RevealGroup>
 
-function CertificationCard({ item }: { item: CertificationItem }) {
-  const isLink = Boolean(item.url);
-  const Wrapper = isLink ? "a" : "div";
-
-  return (
-    <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}>
-      <Wrapper
-        {...(isLink
-          ? {
-              href: item.url,
-              target: "_blank",
-              rel: "noreferrer noopener",
-              "data-cursor-label": "Open",
-            }
-          : {})}
-        className={cn(
-          "group card-surface flex gap-3.5 p-4 transition-colors duration-300 sm:gap-4 sm:p-5",
-          ACCENT_RING[item.accent],
-          isLink && "cursor-pointer",
-        )}
-      >
-        <span
-          aria-hidden
-          className={cn(
-            "grid size-10 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-105",
-            ACCENT_ICON[item.accent],
-          )}
-        >
-          <ShieldCheck className="size-5" />
-        </span>
-
-        <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-2">
-            <p className="text-[0.9375rem] font-semibold leading-snug tracking-tight text-[var(--text-primary)]">
-              {item.title}
-            </p>
-            {isLink ? (
-              <ExternalLink
-                className="mt-0.5 size-3.5 shrink-0 text-[var(--text-tertiary)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                aria-hidden
-              />
-            ) : null}
-          </div>
-
-          <p className="mt-1 text-[0.8125rem] text-[var(--text-secondary)]">
-            {item.issuer} · <span className="font-mono">{item.issued}</span>
-          </p>
-
-          {item.credentialId ? (
-            <p className="mt-1 truncate font-mono text-[0.6875rem] text-[var(--text-tertiary)]">
-              ID: {item.credentialId}
-            </p>
-          ) : null}
-
-          {item.skills.length ? (
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {item.skills.map((skill) => (
-                <Badge key={skill} variant={ACCENT_BADGE[item.accent]} size="sm">
-                  {skill}
-                </Badge>
-              ))}
-            </div>
-          ) : null}
-        </div>
-      </Wrapper>
-    </motion.div>
+        <h3 className="mb-6 mt-20 flex items-center gap-3 font-display text-2xl font-semibold">
+          <Award className="size-6" /> Certifications
+        </h3>
+        <RevealGroup className="grid gap-3 md:grid-cols-3">
+          {certifications.map((cert) => (
+            <RevealItem key={cert.id}>
+              <a
+                href={cert.url}
+                target="_blank"
+                rel="noreferrer"
+                className="glass frame group flex h-full flex-col rounded-md p-7 transition-all hover:border-white/50 duration-500 hover:-translate-y-1.5"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <p className="font-mono text-xs uppercase tracking-wider text-white/50">{cert.issued}</p>
+                  <ArrowUpRight className="size-5 transition-transform duration-500 group-hover:rotate-45" />
+                </div>
+                <h4 className="mt-6 font-display text-xl font-semibold">{cert.title}</h4>
+                <p className="mt-1 text-sm text-white/60">{cert.issuer}</p>
+                <div className="mt-auto flex flex-wrap gap-1.5 pt-6">
+                  {cert.skills.map((s) => (
+                    <span key={s} className="rounded-md bg-white/10 px-2.5 py-1 text-xs text-white/80">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </a>
+            </RevealItem>
+          ))}
+        </RevealGroup>
+      </div>
+    </section>
   );
 }

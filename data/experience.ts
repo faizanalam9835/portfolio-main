@@ -14,11 +14,11 @@ export const experience: readonly ExperienceItem[] = [
     location: "Remote",
     current: true,
     summary:
-      "My first full-time role, working across a Next.js frontend and a Node.js + MongoDB backend. I pick up features end to end, from the data model to the deployed UI.",
+      "My first full-time role, working across a Next.js frontend and a Node.js + PostgreSQL backend. I pick up features end to end, from the data model to the deployed UI.",
     responsibilities: [
       "Build React / Next.js pages and reusable components from design handoffs",
       "Write REST endpoints in Node.js and Express, with input validation and consistent error responses",
-      "Design MongoDB schemas and queries for the features I work on",
+      "Design PostgreSQL schemas and write SQL queries for the features I work on",
       "Integrate third-party and LLM APIs into product features",
       "Fix bugs across the stack and improve page load and query performance",
       "Review my own PRs against team conventions before asking for feedback",
@@ -34,7 +34,7 @@ export const experience: readonly ExperienceItem[] = [
       "TypeScript",
       "Node.js",
       "Express",
-      "MongoDB",
+      "PostgreSQL",
       "Tailwind CSS",
       "REST APIs",
       "Git",
@@ -42,7 +42,7 @@ export const experience: readonly ExperienceItem[] = [
     // "Time in role" is prepended by the section from startDate/endDate.
     metrics: [
       { label: "Features shipped", value: "10+" },
-      { label: "Stack", value: "MERN + Next.js" },
+      { label: "Stack", value: "Next.js + PostgreSQL" },
     ],
   },
   {

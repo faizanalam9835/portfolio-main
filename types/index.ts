@@ -7,7 +7,7 @@ import type { LucideIcon } from "lucide-react";
 export type SectionId =
   | "home"
   | "about"
-  | "tech"
+  | "skills"
   | "projects"
   | "experience"
   | "education"
@@ -16,7 +16,7 @@ export type SectionId =
 export interface NavItem {
   id: SectionId;
   label: string;
-  href: `#${string}`;
+  href: `/${string}`;
 }
 
 /* ------------------------------------------------------------------ *

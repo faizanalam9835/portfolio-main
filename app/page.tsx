@@ -1,12 +1,15 @@
-import { Footer } from "@/components/layout/footer";
-import { Navbar } from "@/components/layout/navbar";
-import { About } from "@/components/sections/about";
-import { Contact } from "@/components/sections/contact";
-import { Education } from "@/components/sections/education";
-import { Experience } from "@/components/sections/experience";
 import { Hero } from "@/components/sections/hero";
-import { Projects } from "@/components/sections/projects";
-import { Technologies } from "@/components/sections/technologies";
+import {
+  AboutPreview,
+  ContactPreview,
+  EducationPreview,
+  ExperiencePreview,
+  ProjectsPreview,
+  SkillsPreview,
+} from "@/components/sections/previews";
+import { experience } from "@/data/experience";
+import { projects } from "@/data/projects";
+import { formatDuration, totalMonthsOfExperience } from "@/lib/duration";
 
 /**
  * Revalidated daily so every derived duration ("6 months in role", the
@@ -15,33 +18,30 @@ import { Technologies } from "@/components/sections/technologies";
 export const revalidate = 86400;
 
 /**
- * A personal portfolio, in the order a person reads one: who I am, what I
- * know, what I've built, where I've worked and studied, how to reach me.
- *
- * The page is a server component — only the interactive parts ship as
- * client bundles.
+ * Home: the hero, then a short teaser of each section. The full detail of
+ * each lives on its own page, reached from the navbar.
  */
 export default function HomePage() {
-  // One timestamp, taken on the server and handed to both sections that
-  // derive text from it — so the server HTML and the client hydration
-  // can never disagree about what month it is.
+  // One timestamp, taken on the server, so the server HTML and the client
+  // hydration can never disagree about what month it is.
   const nowISO = new Date().toISOString();
+  const heroStats = [
+    {
+      value: formatDuration(totalMonthsOfExperience(experience, new Date(nowISO))),
+      label: "Experience",
+    },
+    { value: `${projects.length}+`, label: "Live projects" },
+  ];
 
   return (
     <>
-      <Navbar />
-
-      <main id="main">
-        <Hero />
-        <About nowISO={nowISO} />
-        <Technologies />
-        <Projects />
-        <Experience nowISO={nowISO} />
-        <Education />
-        <Contact />
-      </main>
-
-      <Footer />
+      <Hero stats={heroStats} />
+      <AboutPreview nowISO={nowISO} />
+      <SkillsPreview />
+      <ProjectsPreview />
+      <ExperiencePreview />
+      <EducationPreview />
+      <ContactPreview />
     </>
   );
 }

@@ -16,6 +16,13 @@ export const contactSchema = z.object({
     .min(1, "Email is required.")
     .max(160, "That email is too long.")
     .email("Please enter a valid email address."),
+  /** Optional — passed to the EmailJS template as {{phone}}. */
+  phone: z
+    .string()
+    .trim()
+    .regex(/^\+?[\d\s()-]{7,20}$/, "Please enter a valid phone number.")
+    .optional()
+    .or(z.literal("")),
   message: z
     .string()
     .trim()
@@ -30,6 +37,7 @@ export type ContactInput = z.infer<typeof contactSchema>;
 export const emptyContactInput: ContactInput = {
   name: "",
   email: "",
+  phone: "",
   message: "",
   company: "",
 };

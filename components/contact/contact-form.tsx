@@ -1,11 +1,12 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { TriangleAlert, Check, LoaderCircle, Send } from "lucide-react";
+import { TriangleAlert, Check, LoaderCircle, MessageCircle, Send } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label, Textarea } from "@/components/ui/field";
+import { siteConfig } from "@/data/site";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 import {
   contactSchema,
@@ -19,6 +20,19 @@ import type { ContactResponse } from "@/types";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const MESSAGE_LIMIT = 2000;
+
+/** wa.me link to my number, pre-filled with whatever is already typed. */
+function whatsappHref(values: ContactInput): string {
+  const number = siteConfig.phone.replace(/\D/g, "");
+  const text = [
+    `Hi ${siteConfig.firstName}, I found your portfolio.`,
+    values.name.trim() && `I'm ${values.name.trim()}.`,
+    values.message.trim(),
+  ]
+    .filter(Boolean)
+    .join(" ");
+  return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+}
 
 export function ContactForm() {
   const [values, setValues] = React.useState<ContactInput>(emptyContactInput);
@@ -55,7 +69,7 @@ export function ContactForm() {
         if (key && !nextErrors[key]) nextErrors[key] = issue.message;
       }
       setErrors(nextErrors);
-      setTouched({ name: true, email: true, message: true });
+      setTouched({ name: true, email: true, phone: true, message: true });
       return;
     }
 
@@ -158,6 +172,27 @@ export function ContactForm() {
             </div>
 
             <div className="flex flex-col gap-2">
+              <Label htmlFor="contact-phone" hint="Optional">
+                Phone
+              </Label>
+              <Input
+                id="contact-phone"
+                name="phone"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                placeholder="+91 98765 43210"
+                value={values.phone ?? ""}
+                invalid={Boolean(errors.phone)}
+                aria-describedby={errors.phone ? "contact-phone-error" : undefined}
+                onChange={(event) => update("phone", event.target.value)}
+                onBlur={() => blur("phone")}
+                disabled={isSubmitting}
+              />
+              <FieldError id="contact-phone-error" message={errors.phone} />
+            </div>
+
+            <div className="flex flex-col gap-2">
               <Label
                 htmlFor="contact-message"
                 hint={`${values.message.length} / ${MESSAGE_LIMIT}`}
@@ -197,7 +232,7 @@ export function ContactForm() {
             <div className="flex flex-wrap items-center gap-4">
               <Button
                 type="submit"
-                variant="accent"
+                variant="primary"
                 size="lg"
                 disabled={isSubmitting}
                 className="group w-full min-w-44 sm:w-auto"
@@ -215,10 +250,22 @@ export function ContactForm() {
                 )}
               </Button>
 
-              <p className="text-[0.75rem] text-[var(--text-tertiary)]">
-                Usually replies within a couple of days.
-              </p>
+              <Button
+                asChild
+                size="lg"
+                // WhatsApp's brand green — the one colour allowed on the page.
+                className="w-full min-w-44 bg-[#25D366] text-white hover:-translate-y-0.5 hover:bg-[#1EBE5A] sm:w-auto"
+              >
+                <a href={whatsappHref(values)} target="_blank" rel="noreferrer">
+                  <MessageCircle />
+                  Chat on WhatsApp
+                </a>
+              </Button>
             </div>
+
+            <p className="-mt-1 text-[0.75rem] text-black/45">
+              Prefer a quick chat? WhatsApp opens with your message already typed.
+            </p>
 
             <AnimatePresence>
               {status === "error" && feedback ? (
@@ -229,9 +276,8 @@ export function ContactForm() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.25 }}
                   className={cn(
-                    "flex items-start gap-2.5 rounded-2xl border p-3.5",
+                    "flex items-start gap-2.5 rounded-md border p-3.5",
                     "border-red-200 bg-red-50/70 text-[0.8125rem] text-red-700",
-                    "dark:border-red-500/25 dark:bg-red-500/10 dark:text-red-300",
                   )}
                 >
                   <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
@@ -266,12 +312,12 @@ function SuccessState({
       {/* Draw-on checkmark: the one place a flourish is warranted. */}
       <span className="relative grid size-16 place-items-center">
         <motion.span
-          className="absolute inset-0 rounded-full bg-emerald-500/12"
+          className="absolute inset-0 rounded-md bg-black/10"
           initial={{ scale: 0.6, opacity: 0 }}
           animate={{ scale: [0.6, 1.15, 1], opacity: 1 }}
           transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
         />
-        <svg viewBox="0 0 52 52" className="size-9 text-emerald-600" aria-hidden>
+        <svg viewBox="0 0 52 52" className="size-9 text-black" aria-hidden>
           <motion.path
             d="M14 27 L23 35 L38 18"
             fill="none"
@@ -287,10 +333,10 @@ function SuccessState({
       </span>
 
       <div>
-        <p className="text-lg font-semibold tracking-tight text-[var(--text-primary)]">
+        <p className="text-lg font-semibold tracking-tight text-black">
           Message sent
         </p>
-        <p className="mx-auto mt-1.5 max-w-sm text-[0.875rem] leading-relaxed text-[var(--text-secondary)]">
+        <p className="mx-auto mt-1.5 max-w-sm text-[0.875rem] leading-relaxed text-black/60">
           {message}
         </p>
       </div>

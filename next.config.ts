@@ -10,7 +10,6 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
     ],
   },
-  // three.js ships untranspiled ESM examples; keep the bundle tree-shakeable.
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
   },
